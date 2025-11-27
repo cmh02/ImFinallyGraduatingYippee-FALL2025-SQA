@@ -123,6 +123,31 @@ def cloneRepo(repo_name, target_dir):
 
 
 def checkPythonFile(path2dir): 
+
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
+    # Log the call
+    logger = logging.getLogger()
+    logger.info(f"Call was made to make chunks for a list!")
+    logger.debug(f"Directory Path Type: {type(path2dir)}")
+    logger.debug(f"Directory Path Value: {str(path2dir)}")
+
+    # Validate the directory path
+    if not path2dir:
+        raise ValueError("No directory path was provided to check!")
+    elif isinstance(path2dir, str) is False:
+        raise ValueError("The provided directory path is not a string!")
+    elif len(path2dir) < 1:
+        raise ValueError("The provided directory path is an empty string!")
+    elif os.path.exists(path2dir) is False:
+        raise ValueError("The provided directory path does not exist!")
+
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     usageCount = 0
     patternDict = ['sklearn', 'h5py', 'gym', 'rl', 'tensorflow', 'keras', 'tf', 'stable_baselines', 'tensorforce', 'rl_coach', 'pyqlearning', 'MAMEToolkit', 'chainer', 'torch', 'chainerrl']
     for root_, dirnames, filenames in os.walk(path2dir):
