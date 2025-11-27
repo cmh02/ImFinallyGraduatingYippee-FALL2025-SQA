@@ -91,3 +91,6 @@ class ResourceManager():
 					transformedInputs.append(caster(item))
 				except:
 					pass
+
+		# Return the full list of transformed inputs
+		return transformedInputs
