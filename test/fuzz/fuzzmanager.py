@@ -20,6 +20,18 @@ from typing import Any, Dict, Iterable, Tuple
 from .logging import FuzzLogger
 
 '''
+CUSTOM ERRORS
+'''
+
+class FuzzTimeoutError(Exception):
+	'''
+	# Fuzz Timeout Error
+
+	Custom error to indicate that a fuzzing operation has timed out.
+	'''
+	pass
+
+'''
 CLASS DEFINITION
 '''
 
@@ -201,9 +213,15 @@ class FuzzManager():
 		p.join(timeout=timeout)
 
 		# If the process is still alive after the timeout, terminate it and record a timeout error
-		if p.is_alive():
-			p.kill()
-			processResults['error'] = f"TimeoutError: Function execution exceeded time limit ({timeout} seconds)!"
+		try:
+			if p.is_alive():
+				p.kill()
+				raise FuzzTimeoutError(f"Fuzzing operation timed out after {timeout} seconds!")
+			
+		# Catch the timeout error or any other errors that occurred during killing
+		except Exception as e:
+			processResults['errorName'] = type(e).__name__
+			processResults['errorInfo'] = str(e)
 			processResults['status'] = f"fail"
 
 		# Return the results as a normal dict
@@ -214,20 +232,23 @@ class FuzzManager():
 		results['target'] = str(target)
 		results['args'] = str(args)
 		results['result'] = None
-		results['error'] = None
+		results['errorName'] = None
+		results['errorInfo'] = None
 		results['status'] = None
+
 		try:
 			result = target(*args)
 			results['result'] = result
 			results['status'] = f"pass"
+
 		except Exception as e:
+			results['errorName'] = type(e).__name__
+			results['errorInfo'] = str(e)
 
 			# Expected errors still get to pass
 			if isinstance(e, expectedExceptions):
-				results["error"] = f"Expected exception: {e}"
-				results["status"] = f"pass"
+				results['status'] = f"pass"
 
 			# Unexpected errors are fails
 			else:
-				results['error'] = str(e)
 				results['status'] = f"fail"
