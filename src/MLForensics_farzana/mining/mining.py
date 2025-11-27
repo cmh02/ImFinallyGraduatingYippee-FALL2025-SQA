@@ -74,6 +74,42 @@ def dumpContentIntoFile(strP, fileP):
   
   
 def makeChunks(the_list, size_):
+
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
+    # Log the call
+    logger = logging.getLogger()
+    logger.info(f"Call was made to make chunks for a list!")
+    logger.debug(f"Chunk Size Type: {type(size_)}")
+    logger.debug(f"Chunk Size Value: {str(size_)}")
+    logger.debug(f"List Type: {type(the_list)}")
+    logger.debug(f"List Length: {len(the_list)}")
+    logger.debug(f"List Content (truncated to 500 characters): \n{str(the_list)[:500]}")
+
+    # Validate the list
+    if not the_list:
+        raise ValueError("No list was provided to chunk!")
+    elif isinstance(the_list, list) is False:
+        raise ValueError("The provided input to chunk is not a list!")
+    elif len(the_list) < 1:
+        raise ValueError("The provided list to chunk is empty!")
+    
+    # Validate the chunk size
+    if not size_:
+        raise ValueError("No chunk size was provided!")
+    elif isinstance(size_, int) is False:
+        raise ValueError("The provided chunk size is not an integer!")
+    elif size_ < 1:
+        raise ValueError("The provided chunk size is less than 1!")
+    elif size_ > len(the_list):
+        raise ValueError("The provided chunk size is larger than the list size!")
+
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     for i in range(0, len(the_list), size_):
         yield the_list[i:i+size_]
         
