@@ -4,11 +4,6 @@ Author: Chris Hinkson @cmh02
 Description: Fuzzing for the provided codebase in term project assignment.
 '''
 
-def days_between(d1_, d2_): ## pass in date time objects, if string see commented code 
-    # d1_ = datetime.strptime(d1_, "%Y-%m-%d")
-    # d2_ = datetime.strptime(d2_, "%Y-%m-%d")
-    return abs((d2_ - d1_).days)
-
 '''
 GLOBAL MODULE IMPORTS
 '''
@@ -64,18 +59,6 @@ if __name__ == "__main__":
 	import importlib
 	import multiprocessing
 	from urllib import request
-
-	# Target codebase imports
-	# try:
-	# 	targetFilePath_mining = "MLForensics-farzana/mining/mining.py"
-	# 	spec = importlib.util.spec_from_file_location("mining", targetFilePath_mining)
-	# 	mining = importlib.util.module_from_spec(spec)
-	# 	spec.loader.exec_module(mining)
-	# 	print("Successfully imported target module 'mining'!")
-	# except Exception as e:
-	# 	print(f"Error importing target module: {e}")
-	# 	mining = None
-	
 
 	'''
 	DIRECTORY SETUP
@@ -390,8 +373,15 @@ if __name__ == "__main__":
 	fuzzHandler.registerFuzzInputSource("FuzzDB Integer Overloads", fuzzdbIntegerOverloadsInputs)
 	fuzzHandler.registerFuzzInputSource("FuzzDB Invalid Filenames Linux", fuzzdbInvalidFilenamesLinuxInputs)
 
-	# Perform fuzzing on target functions in the mining module
-	fuzzHandler.performAllFuzzing(
-		targetFunction=days_between,
-		timeout=5.0
-	)
+	# Define list of functions to fuzz from target module
+	from MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
+	functionsToFuzz = [dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount]
+
+	# Perform fuzzing on targets
+	for func in functionsToFuzz:
+		print(f"\n\n=== Fuzzing Function: {func} ===\n\n")
+		fuzzHandler.performAllFuzzing(
+			targetFunction=func,
+			timeout=5.0
+		)
+		print(f"\n\n=== Completed Fuzzing Function: {func} ===\n\n")
