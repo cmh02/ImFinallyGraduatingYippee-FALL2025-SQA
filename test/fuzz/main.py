@@ -145,12 +145,12 @@ if __name__ == "__main__":
 	fuzzManager = FuzzManager()
 
 	# Register fuzz input sources
-	fuzzManager.registerFuzzInputSource("Big List of Naughty Strings", [])
-	fuzzManager.registerFuzzInputSource("FuzzDB All Attacks X Platform", [])
-	fuzzManager.registerFuzzInputSource("FuzzDB Format Strings", [])
-	fuzzManager.registerFuzzInputSource("FuzzDB Integer Overloads", [])
-	fuzzManager.registerFuzzInputSource("FuzzDB Invalid Filenames Linux", [])
-
+	fuzzManager.registerFuzzInputSource("Big List of Naughty Strings", blnsInputs)
+	fuzzManager.registerFuzzInputSource("FuzzDB All Attacks X Platform", fuzzdbAllAttacksXPlatformInputs)
+	fuzzManager.registerFuzzInputSource("FuzzDB Format Strings", fuzzdbFormatStringsInputs)
+	fuzzManager.registerFuzzInputSource("FuzzDB Integer Overloads", fuzzdbIntegerOverloadsInputs)
+	fuzzManager.registerFuzzInputSource("FuzzDB Invalid Filenames Linux", fuzzdbInvalidFilenamesLinuxInputs)
+	
 	# Define list of functions to fuzz from target module
 	functionsToFuzz = [dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount]
 
