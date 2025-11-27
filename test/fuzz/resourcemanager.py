@@ -66,3 +66,28 @@ class ResourceManager():
 
 		# Return success
 		return True
+	
+	def getAllFormsOfInputForResource(resourceInputs: list) -> list:
+		'''
+		
+		'''
+
+		# Verify initial input
+		if not isinstance(resourceInputs, list):
+			raise ValueError("An invalid resource inputs list was supplied to the resource input helper!")
+		elif len(resourceInputs) == 0:
+			return []
+		
+		# Define which all forms of input (casters) to attempt
+		casters = [str, bytes, int, float, hex, oct, bin, bool, repr, list, dict, set, tuple, complex, memoryview, bytearray]
+
+		# Create output list
+		transformedInputs = []
+		for item in resourceInputs:
+			
+			# Attempt each caster, if we fail then just skip that caster
+			for caster in casters:
+				try:
+					transformedInputs.append(caster(item))
+				except:
+					pass
