@@ -154,19 +154,16 @@ if __name__ == "__main__":
 	# Define list of functions to fuzz from target module
 	functionsToFuzz = [dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount]
 
-	# Perform fuzzing on targets
+	# Perform fuzzing on targets and track key metrics
+	fuzzingResults = {}
 	for func in functionsToFuzz:
-		logger.info(f"\n\n=== Fuzzing Function: {func} ===\n\n")
+		logger.info(f"\n\n=== Beginning Fuzzing Function: {func.__name__} ===\n\n")
 		fuzzResults = fuzzManager.performAllFuzzing(
 			targetFunction=func,
 			timeout=5.0
 		)
-		logger.info(f"\n\n=== Completed Fuzzing Function: {func} ===\n\n")
-		logger.info(f"Fuzz Results Summary for {func}:")
-		logger.info(f" -> Total Fuzzes Run: {fuzzResults['totalFuzzes']}")
-		logger.info(f" -> Total Fuzzes Passed: {fuzzResults['totalPass']}")
-		logger.info(f" -> Total Fuzzes Failed: {fuzzResults['totalFail']}")
-		logger.info(f"\n\n========================================\n\n")
+		fuzzingResults[func.__name__] = fuzzResults
+		logger.info(f"\n\n=== Completed Fuzzing Function: {func.__name__} ===\n\n")
 
 	# Provide summary for the entire manager
 	logger.info(f"\n\nTotal Fuzzing Summary:\n\n")

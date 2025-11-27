@@ -81,7 +81,7 @@ class FuzzManager():
 		self.logger.debug(f"Beginning fuzzing of function '{targetFunction}' with all registered input sources: {list(self.fuzzInputSources.keys())}!")
 
 		# Make a dict to hold all results
-		allFuzzResults = {'sources': {}, 'totalPass': 0, 'totalFail': 0, 'totalFuzzes': 0}
+		allFuzzResults = {'sources': {}, 'totalPass': 0, 'totalFail': 0, 'totalFuzzes': 0, 'errorCounts': {}}
 
 		# Iterate over all registered fuzz input sources
 		fuzzSourceIterator = tqdm.tqdm(
@@ -119,6 +119,12 @@ class FuzzManager():
 			allFuzzResults['totalFail'] += allFuzzResults['sources'][fuzzInputName]['totalFail']
 			allFuzzResults['totalFuzzes'] += allFuzzResults['sources'][fuzzInputName]['totalInputs']
 
+			# Update error counts
+			for errorName, errorCount in allFuzzResults['sources'][fuzzInputName]['errorCounts'].items():
+				if errorName not in allFuzzResults['errorCounts']:
+					allFuzzResults['errorCounts'][errorName] = 0
+				allFuzzResults['errorCounts'][errorName] += errorCount
+
 			# Update progress bar
 			fuzzSourceIterator.set_postfix({
 				"Total Fuzzes Pass": allFuzzResults['totalPass'],
@@ -144,6 +150,7 @@ class FuzzManager():
 
 		# Make trackers for this fuzz iteration
 		results = []
+		errorCounts = {}
 		totalInputs = len(fuzzInputs)
 		totalPass = 0
 		totalFail = 0
@@ -174,6 +181,12 @@ class FuzzManager():
 			else:
 				totalFail += 1
 
+				# Track error counts
+				errorName = processResults.get('errorName', 'UnknownError')
+				if errorName not in errorCounts:
+					errorCounts[errorName] = 0
+				errorCounts[errorName] += 1
+
 			# Update progress bar
 			fuzzIterator.set_postfix({
 				"Fuzzes Passed": f"{totalPass:04d}",
@@ -191,6 +204,7 @@ class FuzzManager():
 			"totalInputs": totalInputs,
 			"totalPass": totalPass,
 			"totalFail": totalFail,
+			"errorCounts": errorCounts,
 			"results": results
 		}
 
