@@ -150,15 +150,27 @@ if __name__ == "__main__":
 	fuzzManager.registerFuzzInputSource("FuzzDB Format Strings", fuzzdbFormatStringsInputs)
 	fuzzManager.registerFuzzInputSource("FuzzDB Integer Overloads", fuzzdbIntegerOverloadsInputs)
 	fuzzManager.registerFuzzInputSource("FuzzDB Invalid Filenames Linux", fuzzdbInvalidFilenamesLinuxInputs)
-	
+
 	# Define list of functions to fuzz from target module
 	functionsToFuzz = [dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount]
 
 	# Perform fuzzing on targets
 	for func in functionsToFuzz:
 		logger.info(f"\n\n=== Fuzzing Function: {func} ===\n\n")
-		fuzzManager.performAllFuzzing(
+		fuzzResults = fuzzManager.performAllFuzzing(
 			targetFunction=func,
 			timeout=5.0
 		)
 		logger.info(f"\n\n=== Completed Fuzzing Function: {func} ===\n\n")
+		logger.info(f"Fuzz Results Summary for {func}:")
+		logger.info(f" -> Total Fuzzes Run: {fuzzResults['totalFuzzes']}")
+		logger.info(f" -> Total Fuzzes Passed: {fuzzResults['totalPass']}")
+		logger.info(f" -> Total Fuzzes Failed: {fuzzResults['totalFail']}")
+		logger.info(f"\n\n========================================\n\n")
+
+	# Provide summary for the entire manager
+	logger.info(f"\n\nTotal Fuzzing Summary:\n\n")
+	logger.info(f" -> Total Fuzzes Run: {fuzzManager.totalFuzzesRun}")
+	logger.info(f" -> Total Fuzzes Passed: {fuzzManager.totalFuzzesPassed}")
+	logger.info(f" -> Total Fuzzes Failed: {fuzzManager.totalFuzzesFailed}")
+	logger.info(f"\n\n========================================\n\n")
