@@ -165,9 +165,47 @@ if __name__ == "__main__":
 		fuzzingResults[func.__name__] = fuzzResults
 		logger.info(f"\n\n=== Completed Fuzzing Function: {func.__name__} ===\n\n")
 
-	# Provide summary for the entire manager
-	logger.info(f"\n\nTotal Fuzzing Summary:\n\n")
-	logger.info(f" -> Total Fuzzes Run: {fuzzManager.totalFuzzesRun}")
-	logger.info(f" -> Total Fuzzes Passed: {fuzzManager.totalFuzzesPassed}")
-	logger.info(f" -> Total Fuzzes Failed: {fuzzManager.totalFuzzesFailed}")
-	logger.info(f"\n\n========================================\n\n")
+	'''
+	SUMMARY OUTPUT
+	'''
+
+	# Make top-level header
+	summary = 	f"""
+				# Continuous Integration: Fuzzing Summary
+				"""
+	
+	# Add overall results section
+	summary += f"""
+				## Overall Results
+
+				Total Fuzzed Functions: {len(functionsToFuzz)}
+				Total Fuzzing Operations Run: {fuzzManager.totalFuzzesRun}  
+				Total Fuzzing Operations Passed: {fuzzManager.totalFuzzesPassed}  
+				Total Fuzzing Operations Failed: {fuzzManager.totalFuzzesFailed}
+				"""
+	
+	# Add per-function results
+	summary += f"""
+				## Per-Function Results
+				"""
+	for name, results in fuzzingResults.items():
+		summary += f"""
+					### Function: {name}
+
+					Total Fuzzing Operations Run: {results['totalFuzzes']}  
+					Total Fuzzing Operations Passed: {results['totalPass']}  
+					Total Fuzzing Operations Failed: {results['totalFail']}  
+
+					Error Counts:
+				"""
+		
+		# Sort error counts by frequency
+		sortedErrorCounts = dict(sorted(results.get('errorCounts', {}).items(), key=lambda item: item[1], reverse=True))
+		for errorName, errorCount in sortedErrorCounts.items():
+			summary += f"""
+					- {errorName}: {errorCount}
+			"""
+
+	# Write summary to md file for viewing
+	with open("fuzzingsummary.md", "w") as summaryFile:
+		summaryFile.write(summary)

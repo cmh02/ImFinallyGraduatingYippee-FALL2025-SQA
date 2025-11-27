@@ -30,3 +30,9 @@ jobs:
       - name: Fuzz Testing
         run: |
           python -m test.fuzz.main
+
+      # Upload fuzzing summary to GitHub Actions summary
+      - name: Fuzz Summary
+        run: |
+          echo "## Fuzzing Summary" >> $GITHUB_STEP_SUMMARY
+          cat fuzzingsummary.md >> $GITHUB_STEP_SUMMARY
