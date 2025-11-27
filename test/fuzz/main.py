@@ -109,44 +109,24 @@ if __name__ == "__main__":
 	'''
 
 	# Load Big List of Naughty Strings
-	blnsInputs = []
-	with open(FP_BLNS, "r", encoding="utf-8") as blnsFile:
-		blnsInputs = json.load(blnsFile)
-	logger.info(f"Loaded {len(blnsInputs)} inputs from Big List of Naughty Strings.")
-	blnsInputs = ResourceManager.getAllFormsOfInputForResource(resourceInputs=blnsInputs)
-	logger.info(f"Expanded to {len(blnsInputs)} total inputs from Big List of Naughty Strings after processing.")
+	blnsInputs = ResourceManager.loadTxtResource(filePath=FP_BLNS)
+	logger.info(f"Loaded {len(blnsInputs)} total inputs from Big List of Naughty Strings after processing.")
 
 	# Load FuzzDB all attacks x platform
-	fuzzdbAllAttacksXPlatformInputs = []
-	with open(FP_FUZZDB_ALLATTACKSXPLATFORM, "r", encoding="utf-8") as fuzzdbAllAttacksXPlatformFile:
-		fuzzdbAllAttacksXPlatformInputs = fuzzdbAllAttacksXPlatformFile.readlines()
-	logger.info(f"Loaded {len(fuzzdbAllAttacksXPlatformInputs)} inputs from FuzzDB All Attacks X Platform.")
-	fuzzdbAllAttacksXPlatformInputs = ResourceManager.getAllFormsOfInputForResource(resourceInputs=fuzzdbAllAttacksXPlatformInputs)
-	logger.info(f"Expanded to {len(fuzzdbAllAttacksXPlatformInputs)} total inputs from FuzzDB All Attacks X Platform after processing.")
+	fuzzdbAllAttacksXPlatformInputs = ResourceManager.loadTxtResource(filePath=FP_FUZZDB_ALLATTACKSXPLATFORM)
+	logger.info(f"Loaded {len(fuzzdbAllAttacksXPlatformInputs)} total inputs from FuzzDB All Attacks X Platform after processing.")
 
 	# Load FuzzDB format strings
-	fuzzdbFormatStringsInputs = []
-	with open(FP_FUZZDB_FORMATSTRINGS, "r", encoding="utf-8") as fuzzdbFormatStringsFile:
-		fuzzdbFormatStringsInputs = fuzzdbFormatStringsFile.readlines()
-	logger.info(f"Loaded {len(fuzzdbFormatStringsInputs)} inputs from FuzzDB Format Strings.")
-	fuzzdbFormatStringsInputs = ResourceManager.getAllFormsOfInputForResource(resourceInputs=fuzzdbFormatStringsInputs)
-	logger.info(f"Expanded to {len(fuzzdbFormatStringsInputs)} total inputs from FuzzDB Format Strings after processing.")
+	fuzzdbFormatStringsInputs = ResourceManager.loadTxtResource(filePath=FP_FUZZDB_FORMATSTRINGS)
+	logger.info(f"Loaded {len(fuzzdbFormatStringsInputs)} total inputs from FuzzDB Format Strings after processing.")
 
 	# Load FuzzDB integer overloads
-	fuzzdbIntegerOverloadsInputs = []
-	with open(FP_FUZZDB_INTEGEROVERLOADS, "r", encoding="utf-8") as fuzzdbIntegerOverloadsFile:
-		fuzzdbIntegerOverloadsInputs = fuzzdbIntegerOverloadsFile.readlines()
-	logger.info(f"Loaded {len(fuzzdbIntegerOverloadsInputs)} inputs from FuzzDB Integer Overloads.")
-	fuzzdbIntegerOverloadsInputs = ResourceManager.getAllFormsOfInputForResource(resourceInputs=fuzzdbIntegerOverloadsInputs)
-	logger.info(f"Expanded to {len(fuzzdbIntegerOverloadsInputs)} total inputs from FuzzDB Integer Overloads after processing.")
+	fuzzdbIntegerOverloadsInputs = ResourceManager.loadTxtResource(filePath=FP_FUZZDB_INTEGEROVERLOADS)
+	logger.info(f"Loaded {len(fuzzdbIntegerOverloadsInputs)} total inputs from FuzzDB Integer Overloads after processing.")
 
 	# Load FuzzDB invalid filenames linux
-	fuzzdbInvalidFilenamesLinuxInputs = []
-	with open(FP_FUZZDB_INVALIDFILENAMESLINUX, "r", encoding="utf-8") as fuzzdbInvalidFilenamesLinuxFile:
-		fuzzdbInvalidFilenamesLinuxInputs = fuzzdbInvalidFilenamesLinuxFile.readlines()
-	logger.info(f"Loaded {len(fuzzdbInvalidFilenamesLinuxInputs)} inputs from FuzzDB Invalid Filenames Linux.")
-	fuzzdbInvalidFilenamesLinuxInputs = ResourceManager.getAllFormsOfInputForResource(resourceInputs=fuzzdbInvalidFilenamesLinuxInputs)
-	logger.info(f"Expanded to {len(fuzzdbInvalidFilenamesLinuxInputs)} total inputs from FuzzDB Invalid Filenames Linux after processing.")
+	fuzzdbInvalidFilenamesLinuxInputs = ResourceManager.loadTxtResource(filePath=FP_FUZZDB_INVALIDFILENAMESLINUX)
+	logger.info(f"Loaded {len(fuzzdbInvalidFilenamesLinuxInputs)} total inputs from FuzzDB Invalid Filenames Linux after processing.")
 
 	'''
 	FUZZING EXECUTION
