@@ -9,6 +9,14 @@ import shutil
 from git import Repo
 from git import exc 
 
+'''
+BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+'''
+import logging
+'''
+END MODIFICATIONS BY CHRIS HINKSON @CMH02
+'''
+
 
 def giveTimeStamp():
   tsObj = time.time()
@@ -26,6 +34,39 @@ def deleteRepo(dirName, type_):
         
         
 def dumpContentIntoFile(strP, fileP):
+
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
+    # Log the call
+    logger = logging.getLogger()
+    logger.info(f"Call was made to dump content into file: {str(fileP)}")
+    logger.debug(f"File Path Type: {type(fileP)}")
+    logger.debug(f"Content Type: {type(strP)}")
+    logger.debug(f"Content to Write Length: {len(strP)}")
+    logger.debug(f"Content to write:\n{str(strP)}")
+
+    # Validate the content string
+    if not strP:
+        raise ValueError("No content was provided to write to file!")
+    elif isinstance(strP, str) is False:
+        raise ValueError("The content provided to write to file is not a string!")
+    elif len(strP) < 1:
+        raise ValueError("The content provided to write to file is an empty string!")
+    
+    # Validate the file path
+    if not fileP:
+        raise ValueError("No file path was provided to write content to!")
+    elif isinstance(fileP, str) is False:
+        raise ValueError("The file path provided to write content to is not a string!")
+    elif len(fileP) < 1:
+        raise ValueError("The file path provided to write content to is an empty string!")
+
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     fileToWrite = open( fileP, 'w')
     fileToWrite.write(strP )
     fileToWrite.close()
