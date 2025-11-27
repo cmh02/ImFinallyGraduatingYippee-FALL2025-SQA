@@ -9,7 +9,6 @@ GLOBAL MODULE IMPORTS
 '''
 
 # Typing Support
-import time
 from multiprocessing import managers
 from typing import Dict, Tuple, Iterable, Any
 
@@ -56,7 +55,7 @@ if __name__ == "__main__":
 	import json
 	import tqdm
 	import inspect
-	import importlib
+	import tempfile
 	import multiprocessing
 	from urllib import request
 
@@ -242,7 +241,11 @@ if __name__ == "__main__":
 
 			Perform fuzzing on the target function using all registered fuzz input sources.
 			'''
+
+			# Make a dict to hold all results
 			allFuzzResults = {'sources': {}, 'totalPass': 0, 'totalFail': 0, 'totalFuzzes': 0}
+
+			# Iterate over all registered fuzz input sources
 			fuzzSourceIterator = tqdm.tqdm(
 				iterable=self.fuzzInputSources.items(),
 				desc=f"Performing Fuzzing On {targetFunction} With All Sources!",
@@ -252,13 +255,26 @@ if __name__ == "__main__":
 			)
 			for fuzzInputName, fuzzInputs in fuzzSourceIterator:
 
-				# Get results for this input source
-				allFuzzResults['sources'][fuzzInputName] = self._performFuzzing(
-					fuzzInputName=fuzzInputName,
-					fuzzInputs=fuzzInputs,
-					targetFunction=targetFunction,
-					timeout=timeout
-				)
+				# Make a temporary directory for this fuzzing session
+				with tempfile.TemporaryDirectory() as temporaryWorkingDirectory:
+
+					try:
+						# Change to the temporary directory
+						originalWorkingDirectory = os.getcwd()
+						os.chdir(temporaryWorkingDirectory)
+
+						# Get results for this input source
+						allFuzzResults['sources'][fuzzInputName] = self._performFuzzing(
+							fuzzInputName=fuzzInputName,
+							fuzzInputs=fuzzInputs,
+							targetFunction=targetFunction,
+							timeout=timeout
+						)
+
+					finally:
+
+						# Change back to the original directory
+						os.chdir(originalWorkingDirectory)
 
 				# Update total counts
 				allFuzzResults['totalPass'] += allFuzzResults['sources'][fuzzInputName]['totalPass']
@@ -374,7 +390,7 @@ if __name__ == "__main__":
 	fuzzHandler.registerFuzzInputSource("FuzzDB Invalid Filenames Linux", fuzzdbInvalidFilenamesLinuxInputs)
 
 	# Define list of functions to fuzz from target module
-	from MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
+	from ...src.MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
 	functionsToFuzz = [dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount]
 
 	# Perform fuzzing on targets
