@@ -19,6 +19,7 @@ from .resourcemanager import ResourceManager
 # System
 import os
 import json
+import textwrap
 
 if __name__ == "__main__":
 
@@ -170,41 +171,44 @@ if __name__ == "__main__":
 	'''
 
 	# Make top-level header
-	summary = 	f"""
-				# Continuous Integration: Fuzzing Summary
-				"""
+	summary = textwrap.dedent(f"""
+			# Continuous Integration: Fuzzing Summary
+			""")
 	
 	# Add overall results section
-	summary += f"""
+	summary += textwrap.dedent(f"""
 				## Overall Results
 
 				Total Fuzzed Functions: {len(functionsToFuzz)}
 				Total Fuzzing Operations Run: {fuzzManager.totalFuzzesRun}  
 				Total Fuzzing Operations Passed: {fuzzManager.totalFuzzesPassed}  
 				Total Fuzzing Operations Failed: {fuzzManager.totalFuzzesFailed}
-				"""
+				""")
 	
 	# Add per-function results
-	summary += f"""
-				## Per-Function Results
-				"""
+	summary += textwrap.dedent(f"""
+			## Per-Function Results
+			""")
 	for name, results in fuzzingResults.items():
-		summary += f"""
+		summary += textwrap.dedent(f"""
 					### Function: {name}
 
 					Total Fuzzing Operations Run: {results['totalFuzzes']}  
 					Total Fuzzing Operations Passed: {results['totalPass']}  
 					Total Fuzzing Operations Failed: {results['totalFail']}  
-
-					Error Counts:
-				"""
+					""")
 		
 		# Sort error counts by frequency
-		sortedErrorCounts = dict(sorted(results.get('errorCounts', {}).items(), key=lambda item: item[1], reverse=True))
-		for errorName, errorCount in sortedErrorCounts.items():
-			summary += f"""
-					- {errorName}: {errorCount}
-			"""
+		if 'errorCounts' is not None:
+			summary += 	textwrap.dedent(f"""
+						Error Counts:
+						""")
+
+			sortedErrorCounts = dict(sorted(results.get('errorCounts', {}).items(), key=lambda item: item[1], reverse=True))
+			for errorName, errorCount in sortedErrorCounts.items():
+				summary += textwrap.dedent(f"""
+							- {errorName}: {errorCount}
+							""")
 
 	# Write summary to md file for viewing
 	with open("fuzzingsummary.md", "w") as summaryFile:
