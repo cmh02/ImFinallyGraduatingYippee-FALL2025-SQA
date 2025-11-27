@@ -41,6 +41,14 @@ class FuzzManager():
 		# Make lists for holding fuzz input sources
 		self.fuzzInputSources = {}
 
+		# Create counters to track all fuzzing operations run through this instance
+		self.totalFuzzesRun = 0
+		self.totalFuzzesPassed = 0
+		self.totalFuzzesFailed = 0
+
+		# Log initialization
+		self.logger.info(f"FuzzManager instance has been initialized with PID {os.getpid()}!")
+
 	def registerFuzzInputSource(self, name: str, inputs: Iterable) -> None:
 		'''
 		## Register Fuzz Input Source
@@ -48,6 +56,7 @@ class FuzzManager():
 		Register a new fuzz input source by name.
 		'''
 		self.fuzzInputSources[name] = inputs
+		self.logger.debug(f"Registered new fuzz input source '{name}' with {len(inputs)} inputs!")
 
 	def performAllFuzzing(self, targetFunction: callable, timeout: float = 5.0) -> Dict[str, Any]:
 		'''
@@ -55,6 +64,9 @@ class FuzzManager():
 
 		Perform fuzzing on the target function using all registered fuzz input sources.
 		'''
+
+		# Log debug info
+		self.logger.debug(f"Beginning fuzzing of function '{targetFunction}' with all registered input sources: {list(self.fuzzInputSources.keys())}!")
 
 		# Make a dict to hold all results
 		allFuzzResults = {'sources': {}, 'totalPass': 0, 'totalFail': 0, 'totalFuzzes': 0}
@@ -101,6 +113,16 @@ class FuzzManager():
 				"Total Fuzzes Fail": allFuzzResults['totalFail'],
 				"Total Fuzzes": allFuzzResults['totalFuzzes']
 			})
+
+			# Log completion of this source
+			self.logger.debug(f"Completed fuzzing of function '{targetFunction}' with input source '{fuzzInputName}'!")
+
+		# Update instance counters
+		self.totalFuzzesRun += allFuzzResults['totalFuzzes']
+		self.totalFuzzesPassed += allFuzzResults['totalPass']
+		self.totalFuzzesFailed += allFuzzResults['totalFail']
+
+		# Return all fuzzing results
 		return allFuzzResults
 
 	def _performFuzzing(self, fuzzInputName: str, fuzzInputs: Iterable, targetFunction: callable, timeout: float = 5.0) -> Tuple[str, Any]:

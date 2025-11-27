@@ -9,7 +9,7 @@ MODULE IMPORTS
 '''
 
 # Target Module Imports
-from ...src.MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
+from src.MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
 
 # Fuzz Submodule Imports
 from .logging import FuzzLogger
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 	FUZZING EXECUTION
 	'''
 
-	# Make a fuzz handler
+	# Make a fuzz manager
 	fuzzManager = FuzzManager()
 
 	# Register fuzz input sources
