@@ -67,17 +67,34 @@ class ResourceManager():
 		# Return success
 		return True
 	
-	def getAllFormsOfInputForResource(resourceInputs: list) -> list:
+	@staticmethod
+	def loadTxtResource(filePath: str) -> list:
 		'''
+		# Load TXT Resource Helper
+
+		Load a text resource file from the specified file path and cast it to all possible types.
 		
+		Args:
+			filePath (str): The file path of the text resource to load.
+
+		Returns:
+			resourceInputs (list): A list of all possible forms of input derived from the text resource.
 		'''
 
-		# Verify initial input
-		if not isinstance(resourceInputs, list):
-			raise ValueError("An invalid resource inputs list was supplied to the resource input helper!")
-		elif len(resourceInputs) == 0:
-			return []
-		
+		# Verify txt file exists
+		if not filePath:
+			raise ValueError("An invalid file path was supplied to the txt resource loader!")
+		elif isinstance(filePath, str) is False:
+			raise TypeError("The supplied file path to the txt resource loader was not a string!")
+		elif os.path.exists(filePath) is False:
+			raise FileNotFoundError(f"The specified txt resource file does not exist: {filePath}")
+
+		resourceInputs = None
+		with open(filePath, "r", encoding="utf-8") as resourceFile:
+			resourceInputs = resourceFile.readlines()
+		if resourceInputs is None:
+			raise Exception(f"Failed to load txt resource file: {filePath}")
+
 		# Define which all forms of input (casters) to attempt
 		casters = [str, bytes, int, float, hex, oct, bin, bool, repr, list, dict, set, tuple, complex, memoryview, bytearray]
 
