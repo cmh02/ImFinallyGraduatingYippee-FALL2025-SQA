@@ -4,12 +4,20 @@ Author: Chris Hinkson @cmh02
 Description: Provides a resource download helper.
 '''
 
-
 '''
 MODULE IMPORTS
 '''
+
+# System
 import os
 from urllib import request
+
+# Logging
+from .logging import FuzzLogger
+
+'''
+CLASS DEFINITION
+'''
 
 class ResourceManager():
 
@@ -28,6 +36,9 @@ class ResourceManager():
 		Returns:
 			out (bool): True if the resource was downloaded, False if it was already present.
 		'''
+
+		# Get logger
+		logger = FuzzLogger()
 
 		# Perform validation on inputs
 		if not url or isinstance(url, str) is False:

@@ -7,12 +7,21 @@ Description: Provides a fuzzmanager class for easier fuzzing.
 '''
 MODULE IMPORTS
 '''
+
+# System
 import os
 import tqdm
 import inspect
 import tempfile
 import multiprocessing
 from typing import Any, Dict, Iterable, Tuple
+
+# Logging
+from .logging import FuzzLogger
+
+'''
+CLASS DEFINITION
+'''
 
 class FuzzManager():
 	'''
@@ -22,6 +31,9 @@ class FuzzManager():
 	'''
 
 	def __init__(self):
+
+		# Get logger
+		self.logger = FuzzLogger()
 
 		# Get subprocess manager
 		self.manager = multiprocessing.Manager()

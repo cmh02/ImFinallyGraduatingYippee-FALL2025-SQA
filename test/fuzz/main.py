@@ -12,6 +12,7 @@ MODULE IMPORTS
 from ...src.MLForensics_farzana.mining.mining import dumpContentIntoFile, makeChunks, checkPythonFile, days_between, getPythonFileCount
 
 # Fuzz Submodule Imports
+from .logging import FuzzLogger
 from .fuzzmanager import FuzzManager
 from .resourcemanager import ResourceManager
 
@@ -20,6 +21,14 @@ import os
 import json
 
 if __name__ == "__main__":
+
+	'''
+	LOGGER SETUP
+	'''
+
+	# Initialize logger
+	logger = FuzzLogger()
+	logger.info("Fuzz Testing Logger Initialized!")
 
 	'''
 	DIRECTORY SETUP
@@ -37,10 +46,10 @@ if __name__ == "__main__":
 	os.makedirs(DIRECTORY_OUTPUT, exist_ok=True)
 
 	# Print status
-	print(f"Directory Setup has been completed!")
-	print(f" -> Working Directory: {DIRECTORY_WORKING}")
-	print(f" -> Resources Directory: {DIRECTORY_RESOURCES}")
-	print(f" -> Output Directory: {DIRECTORY_OUTPUT}")
+	logger.info(f"Directory Setup has been completed!")
+	logger.info(f" -> Working Directory: {DIRECTORY_WORKING}")
+	logger.info(f" -> Resources Directory: {DIRECTORY_RESOURCES}")
+	logger.info(f" -> Output Directory: {DIRECTORY_OUTPUT}")
 
 	'''
 	RESOURCE DOWNLOAD
@@ -56,41 +65,41 @@ if __name__ == "__main__":
 	FP_BLNS = os.path.join(DIRECTORY_RESOURCES, "blns.json")
 	URL_BLNS = "https://raw.githubusercontent.com/minimaxir/big-list-of-naughty-strings/master/blns.json"
 	if ResourceManager.downloadResource(URL_BLNS, FP_BLNS, "Big List of Naughty Strings"):
-		print(f"Big List of Naughty Strings downloaded to {FP_BLNS}!")
+		logger.info(f"Big List of Naughty Strings downloaded to {FP_BLNS}!")
 	else:
-		print(f"Big List of Naughty Strings already present at {FP_BLNS}!")
+		logger.info(f"Big List of Naughty Strings already present at {FP_BLNS}!")
 
 	# Downnload FuzzDB all attacks x platform version
 	FP_FUZZDB_ALLATTACKSXPLATFORM = os.path.join(DIRECTORY_RESOURCES, "all-attacks-xplatform.txt")
 	URL_FUZZDB_ALLATTACKSXPLATFORM = "https://raw.githubusercontent.com/fuzzdb-project/fuzzdb/refs/heads/master/attack/all-attacks/all-attacks-xplatform.txt"
 	if ResourceManager.downloadResource(URL_FUZZDB_ALLATTACKSXPLATFORM, FP_FUZZDB_ALLATTACKSXPLATFORM, "FuzzDB All Attacks X Platform"):
-		print(f"FuzzDB All Attacks X Platform downloaded to {FP_FUZZDB_ALLATTACKSXPLATFORM}!")
+		logger.info(f"FuzzDB All Attacks X Platform downloaded to {FP_FUZZDB_ALLATTACKSXPLATFORM}!")
 	else:
-		print(f"FuzzDB All Attacks X Platform already present at {FP_FUZZDB_ALLATTACKSXPLATFORM}!")
+		logger.info(f"FuzzDB All Attacks X Platform already present at {FP_FUZZDB_ALLATTACKSXPLATFORM}!")
 
 	# Download FuzzDB format strings
 	FP_FUZZDB_FORMATSTRINGS = os.path.join(DIRECTORY_RESOURCES, "format-strings.txt")
 	URL_FUZZDB_FORMATSTRINGS = "https://raw.githubusercontent.com/fuzzdb-project/fuzzdb/refs/heads/master/attack/format-strings/format-strings.txt"
 	if ResourceManager.downloadResource(URL_FUZZDB_FORMATSTRINGS, FP_FUZZDB_FORMATSTRINGS, "FuzzDB Format Strings"):
-		print(f"FuzzDB Format Strings downloaded to {FP_FUZZDB_FORMATSTRINGS}!")
+		logger.info(f"FuzzDB Format Strings downloaded to {FP_FUZZDB_FORMATSTRINGS}!")
 	else:
-		print(f"FuzzDB Format Strings already present at {FP_FUZZDB_FORMATSTRINGS}!")
+		logger.info(f"FuzzDB Format Strings already present at {FP_FUZZDB_FORMATSTRINGS}!")
 
 	# Download FuzzDB integer overloads
 	FP_FUZZDB_INTEGEROVERLOADS = os.path.join(DIRECTORY_RESOURCES, "integer-overloads.txt")
 	URL_FUZZDB_INTEGEROVERLOADS = "https://raw.githubusercontent.com/fuzzdb-project/fuzzdb/refs/heads/master/attack/integer-overflow/integer-overflows.txt"
 	if ResourceManager.downloadResource(URL_FUZZDB_INTEGEROVERLOADS, FP_FUZZDB_INTEGEROVERLOADS, "FuzzDB Integer Overloads"):
-		print(f"FuzzDB Integer Overloads downloaded to {FP_FUZZDB_INTEGEROVERLOADS}!")
+		logger.info(f"FuzzDB Integer Overloads downloaded to {FP_FUZZDB_INTEGEROVERLOADS}!")
 	else:
-		print(f"FuzzDB Integer Overloads already present at {FP_FUZZDB_INTEGEROVERLOADS}!")
+		logger.info(f"FuzzDB Integer Overloads already present at {FP_FUZZDB_INTEGEROVERLOADS}!")
 
 	# Download FuzzDB invalid filenames
 	FP_FUZZDB_INVALIDFILENAMESLINUX = os.path.join(DIRECTORY_RESOURCES, "invalid-filenames-linux.txt")
 	URL_FUZZDB_INVALIDFILENAMESLINUX = "https://raw.githubusercontent.com/fuzzdb-project/fuzzdb/refs/heads/master/attack/file-upload/invalid-filenames-linux.txt"
 	if ResourceManager.downloadResource(URL_FUZZDB_INVALIDFILENAMESLINUX, FP_FUZZDB_INVALIDFILENAMESLINUX, "FuzzDB Invalid Filenames Linux"):
-		print(f"FuzzDB Invalid Filenames Linux downloaded to {FP_FUZZDB_INVALIDFILENAMESLINUX}!")
+		logger.info(f"FuzzDB Invalid Filenames Linux downloaded to {FP_FUZZDB_INVALIDFILENAMESLINUX}!")
 	else:
-		print(f"FuzzDB Invalid Filenames Linux already present at {FP_FUZZDB_INVALIDFILENAMESLINUX}!")
+		logger.info(f"FuzzDB Invalid Filenames Linux already present at {FP_FUZZDB_INVALIDFILENAMESLINUX}!")
 
 	'''
 	RESOURCE LOADING
@@ -102,31 +111,31 @@ if __name__ == "__main__":
 	blnsInputs = []
 	with open(FP_BLNS, "r", encoding="utf-8") as blnsFile:
 		blnsInputs = json.load(blnsFile)
-		print(f"Loaded {len(blnsInputs)} inputs from Big List of Naughty Strings.")
+		logger.info(f"Loaded {len(blnsInputs)} inputs from Big List of Naughty Strings.")
 
 	# Load FuzzDB all attacks x platform
 	fuzzdbAllAttacksXPlatformInputs = []
 	with open(FP_FUZZDB_ALLATTACKSXPLATFORM, "r", encoding="utf-8") as fuzzdbAllAttacksXPlatformFile:
 		fuzzdbAllAttacksXPlatformInputs = fuzzdbAllAttacksXPlatformFile.readlines()
-		print(f"Loaded {len(fuzzdbAllAttacksXPlatformInputs)} inputs from FuzzDB All Attacks X Platform.")
+		logger.info(f"Loaded {len(fuzzdbAllAttacksXPlatformInputs)} inputs from FuzzDB All Attacks X Platform.")
 
 	# Load FuzzDB format strings
 	fuzzdbFormatStringsInputs = []
 	with open(FP_FUZZDB_FORMATSTRINGS, "r", encoding="utf-8") as fuzzdbFormatStringsFile:
 		fuzzdbFormatStringsInputs = fuzzdbFormatStringsFile.readlines()
-		print(f"Loaded {len(fuzzdbFormatStringsInputs)} inputs from FuzzDB Format Strings.")
+		logger.info(f"Loaded {len(fuzzdbFormatStringsInputs)} inputs from FuzzDB Format Strings.")
 
 	# Load FuzzDB integer overloads
 	fuzzdbIntegerOverloadsInputs = []
 	with open(FP_FUZZDB_INTEGEROVERLOADS, "r", encoding="utf-8") as fuzzdbIntegerOverloadsFile:
 		fuzzdbIntegerOverloadsInputs = fuzzdbIntegerOverloadsFile.readlines()
-		print(f"Loaded {len(fuzzdbIntegerOverloadsInputs)} inputs from FuzzDB Integer Overloads.")
+		logger.info(f"Loaded {len(fuzzdbIntegerOverloadsInputs)} inputs from FuzzDB Integer Overloads.")
 
 	# Load FuzzDB invalid filenames linux
 	fuzzdbInvalidFilenamesLinuxInputs = []
 	with open(FP_FUZZDB_INVALIDFILENAMESLINUX, "r", encoding="utf-8") as fuzzdbInvalidFilenamesLinuxFile:
 		fuzzdbInvalidFilenamesLinuxInputs = fuzzdbInvalidFilenamesLinuxFile.readlines()
-		print(f"Loaded {len(fuzzdbInvalidFilenamesLinuxInputs)} inputs from FuzzDB Invalid Filenames Linux.")
+		logger.info(f"Loaded {len(fuzzdbInvalidFilenamesLinuxInputs)} inputs from FuzzDB Invalid Filenames Linux.")
 
 	'''
 	FUZZING EXECUTION
@@ -147,9 +156,9 @@ if __name__ == "__main__":
 
 	# Perform fuzzing on targets
 	for func in functionsToFuzz:
-		print(f"\n\n=== Fuzzing Function: {func} ===\n\n")
+		logger.info(f"\n\n=== Fuzzing Function: {func} ===\n\n")
 		fuzzManager.performAllFuzzing(
 			targetFunction=func,
 			timeout=5.0
 		)
-		print(f"\n\n=== Completed Fuzzing Function: {func} ===\n\n")
+		logger.info(f"\n\n=== Completed Fuzzing Function: {func} ===\n\n")
