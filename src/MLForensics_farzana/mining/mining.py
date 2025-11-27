@@ -170,6 +170,34 @@ def checkPythonFile(path2dir):
 def days_between(d1_, d2_): ## pass in date time objects, if string see commented code 
     # d1_ = datetime.strptime(d1_, "%Y-%m-%d")
     # d2_ = datetime.strptime(d2_, "%Y-%m-%d")
+
+
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
+    # Log the call
+    logger = logging.getLogger()
+    logger.info(f"Call was made to calculate the days between two dates!")
+    logger.debug(f"Date 1 Type: {type(d1_)}")
+    logger.debug(f"Date 1 Value: {str(d1_)}")
+    logger.debug(f"Date 2 Type: {type(d2_)}")
+    logger.debug(f"Date 2 Value: {str(d2_)}")
+
+    # Validate the date inputs
+    if not d1_:
+        raise ValueError("No first date was provided to calculate days between!")
+    if not d2_:
+        raise ValueError("No second date was provided to calculate days between!")
+    if isinstance(d1_, datetime) is False:
+        raise ValueError("The first date provided is not a datetime object!")
+    if isinstance(d2_, datetime) is False:
+        raise ValueError("The second date provided is not a datetime object!")
+
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     return abs((d2_ - d1_).days)
     
     
