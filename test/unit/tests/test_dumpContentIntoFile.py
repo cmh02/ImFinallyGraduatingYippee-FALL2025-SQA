@@ -56,9 +56,9 @@ def test_dumpContentIntoFile_fileIsWritten(tmp_path):
 	actualSize = str(os.stat(testFilePath).st_size)
 
 	# Assert that the file was created
-	assert os.path.exists(testFilePath)
-	assert returnedSize > 0
-	assert actualSize > 0
+	assert os.path.exists(str(testFilePath))
+	assert int(returnedSize) > 0
+	assert int(actualSize) > 0
 
 def test_dumpContentIntoFile_returnVal(tmp_path):
 	'''
@@ -94,7 +94,7 @@ def test_dumpContentIntoFile_returnVal(tmp_path):
 	)
 
 	# Get the size of the content we wrote
-	actualSize = str(os.stat(testFilePath).st_size)
+	actualSize = os.stat(str(testFilePath)).st_size
 
 	# Assert that the returned size matches the actual size
-	assert returnedSize == actualSize
+	assert int(returnedSize) == int(actualSize)
