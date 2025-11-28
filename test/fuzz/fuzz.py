@@ -86,7 +86,6 @@ if __name__ == "__main__":
 	else:
 		logger.info(f"FuzzDB Commands Linux already present at {FP_FUZZDB_COMMANDSLINUX}!")
 
-
 	# Download FuzzDB Commands-OSX.txt
 	FP_FUZZDB_COMMANDSOSX = os.path.join(DIRECTORY_RESOURCES, "commands-osx.txt")
 	URL_FUZZDB_COMMANDSOSX = "https://raw.githubusercontent.com/fuzzdb-project/fuzzdb/refs/heads/master/attack/os-cmd-execution/Commands-OSX.txt"
