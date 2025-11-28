@@ -51,7 +51,7 @@ def dumpContentIntoFile(strP, fileP):
     if not strP:
         raise ValueError("No content was provided to write to file!")
     elif isinstance(strP, str) is False:
-        raise ValueError("The content provided to write to file is not a string!")
+        raise TypeError("The content provided to write to file is not a string!")
     elif len(strP) < 1:
         raise ValueError("The content provided to write to file is an empty string!")
     
@@ -59,7 +59,7 @@ def dumpContentIntoFile(strP, fileP):
     if not fileP:
         raise ValueError("No file path was provided to write content to!")
     elif isinstance(fileP, str) is False:
-        raise ValueError("The file path provided to write content to is not a string!")
+        raise TypeError("The file path provided to write content to is not a string!")
     elif len(fileP) < 1:
         raise ValueError("The file path provided to write content to is an empty string!")
 
@@ -70,6 +70,16 @@ def dumpContentIntoFile(strP, fileP):
     fileToWrite = open( fileP, 'w')
     fileToWrite.write(strP )
     fileToWrite.close()
+    
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+    logger.info(f"Content successfully written to file: {str(fileP)}!")
+    logger.debug(f"Size of content written to file: {str(os.stat(fileP).st_size)} bytes!")
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     return str(os.stat(fileP).st_size)
   
   
@@ -92,7 +102,7 @@ def makeChunks(the_list, size_):
     if not the_list:
         raise ValueError("No list was provided to chunk!")
     elif isinstance(the_list, list) is False:
-        raise ValueError("The provided input to chunk is not a list!")
+        raise TypeError("The provided input to chunk is not a list!")
     elif len(the_list) < 1:
         raise ValueError("The provided list to chunk is empty!")
     
@@ -100,7 +110,7 @@ def makeChunks(the_list, size_):
     if not size_:
         raise ValueError("No chunk size was provided!")
     elif isinstance(size_, int) is False:
-        raise ValueError("The provided chunk size is not an integer!")
+        raise TypeError("The provided chunk size is not an integer!")
     elif size_ < 1:
         raise ValueError("The provided chunk size is less than 1!")
     elif size_ > len(the_list):
@@ -138,7 +148,7 @@ def checkPythonFile(path2dir):
     if not path2dir:
         raise ValueError("No directory path was provided to check!")
     elif isinstance(path2dir, str) is False:
-        raise ValueError("The provided directory path is not a string!")
+        raise TypeError("The provided directory path is not a string!")
     elif len(path2dir) < 1:
         raise ValueError("The provided directory path is an empty string!")
     elif os.path.exists(path2dir) is False:
@@ -189,9 +199,9 @@ def days_between(d1_, d2_): ## pass in date time objects, if string see commente
     if not d2_:
         raise ValueError("No second date was provided to calculate days between!")
     if isinstance(d1_, datetime) is False:
-        raise ValueError("The first date provided is not a datetime object!")
+        raise TypeError("The first date provided is not a datetime object!")
     if isinstance(d2_, datetime) is False:
-        raise ValueError("The second date provided is not a datetime object!")
+        raise TypeError("The second date provided is not a datetime object!")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
@@ -274,7 +284,7 @@ def getPythonFileCount(path2dir):
     if not path2dir:
         raise ValueError("No directory path was provided to check!")
     elif isinstance(path2dir, str) is False:
-        raise ValueError("The provided directory path is not a string!")
+        raise TypeError("The provided directory path is not a string!")
     elif len(path2dir) < 1:
         raise ValueError("The provided directory path is an empty string!")
     elif os.path.exists(path2dir) is False:
