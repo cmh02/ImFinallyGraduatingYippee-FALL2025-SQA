@@ -32,6 +32,7 @@ jobs:
           REPORT_OUTPUT: md_report.md
         run: |
           echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
+          echo "PYTHONPATH=${PYTHONPATH}:${GITHUB_WORKSPACE}" >> $GITHUB_ENV
           pytest -s --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT"
 
       # Add unit test report to GitHub Summary
@@ -45,3 +46,10 @@ jobs:
               .addHeading('Unit Test Report')
               .addRaw(content)
               .write();
+
+      # Upload report as artifact
+      - name: Upload Report Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: ${{ env.REPORT_FILE }}
