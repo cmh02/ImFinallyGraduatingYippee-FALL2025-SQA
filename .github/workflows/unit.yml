@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
           export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
-          pytest -s --md-report --md-report-flavor gfm --md-report-color never --md-report-output "$REPORT_OUTPUT"
+          pytest -s --md-report --md-report-raw --md-report-flavor gfm --md-report-color never --md-report-output "$REPORT_OUTPUT"
 
       # Add unit test report to GitHub Summary with JS
       - name: Add Unit Testing Summary to GitHub Summary
