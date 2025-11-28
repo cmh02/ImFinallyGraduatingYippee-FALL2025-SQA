@@ -213,10 +213,13 @@ def test_dumpContentIntoFile_validationException1(tmp_path):
 			fileP=testFilePath
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a ValueError was raised
-	assert isinstance(returnedException, ValueError)
+		# Assert that a ValueError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, ValueError)
 
 def test_dumpContentIntoFile_validationException2(tmp_path):
 	'''
@@ -253,10 +256,13 @@ def test_dumpContentIntoFile_validationException2(tmp_path):
 			fileP=testFilePath
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a TypeError was raised
-	assert isinstance(returnedException, TypeError)
+		# Assert that a TypeError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, TypeError)
 
 def test_dumpContentIntoFile_validationException3(tmp_path):
 	'''
@@ -293,10 +299,13 @@ def test_dumpContentIntoFile_validationException3(tmp_path):
 			fileP=testFilePath
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a ValueError was raised
-	assert isinstance(returnedException, ValueError)
+		# Assert that a ValueError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, ValueError)
 
 def test_dumpContentIntoFile_validationException4(tmp_path):
 	'''
@@ -333,10 +342,13 @@ def test_dumpContentIntoFile_validationException4(tmp_path):
 			fileP=None
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a ValueError was raised
-	assert isinstance(returnedException, ValueError)
+		# Assert that a ValueError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, ValueError)
 
 def test_dumpContentIntoFile_validationException5(tmp_path):
 	'''
@@ -373,10 +385,13 @@ def test_dumpContentIntoFile_validationException5(tmp_path):
 			fileP=1
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a TypeError was raised
-	assert isinstance(returnedException, TypeError)
+		# Assert that a TypeError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, TypeError)
 
 def test_dumpContentIntoFile_validationException6(tmp_path):
 	'''
@@ -413,7 +428,10 @@ def test_dumpContentIntoFile_validationException6(tmp_path):
 			fileP=""
 		)
 	except Exception as error:
+
+		# Grab the error
 		returnedException = error
 
-	# Assert that a ValueError was raised
-	assert isinstance(returnedException, ValueError)
+		# Assert that a ValueError was raised
+		assert returnedException is not None
+		assert isinstance(returnedException, ValueError)
