@@ -31,21 +31,32 @@ jobs:
         env:
           REPORT_OUTPUT: md_report.md
         run: |
-          echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
           export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
+          echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
           pytest -v --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT"
 
       # Add unit test report to GitHub Summary with JS
+      # - name: Add Unit Testing Summary to GitHub Summary
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       const fs = require('fs');
+      #       const content = fs.readFileSync(process.env.REPORT_FILE, 'utf8');
+      #       await core.summary
+      #         .addHeading('Unit Test Report')
+      #         .addRaw(content, true)
+      #         .write();
+
       - name: Add Unit Testing Summary to GitHub Summary
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const content = fs.readFileSync(process.env.REPORT_FILE, 'utf8');
-            await core.summary
-              .addHeading('Unit Test Report')
-              .addRaw(content, true)
-              .write();
+        shell: bash
+        run: |
+          if [ -f "$REPORT_FILE" ]; then
+            echo "<details><summary>Unit Test Report</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat "$REPORT_FILE" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
+          fi
 
       # Upload report as artifact
       - name: Upload Report Artifact
