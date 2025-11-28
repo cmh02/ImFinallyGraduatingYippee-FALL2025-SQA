@@ -28,11 +28,15 @@ jobs:
 
       # Run unit tests
       - name: Unit Testing
+        env:
+          REPORT_OUTPUT: md_report.md
         run: |
-          python -m test.unit.unit
+          echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
+          pytest -s --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT"
 
       # Upload unit testing summary to GitHub Actions summary
       - name: Unit Testing Summary
-        run: |
-          echo "## Unit Testing Summary" >> $GITHUB_STEP_SUMMARY
-          cat unittestsummary.md >> $GITHUB_STEP_SUMMARY
+        with:
+          header: test-report
+          recreate: true
+          path: ${{ env.REPORT_FILE }}
