@@ -48,8 +48,8 @@ def test_dumpContentIntoFile_fileIsWritten(tmp_path):
 
 	# Call the target function
 	returnedSize = dumpContentIntoFile(
-		filePath=testFilePath,
-		content=textwrap.dedent(testContent).strip()
+		strP=testContent,
+		fileP=testFilePath
 	)
 
 	# Get the size of the content we wrote
@@ -89,8 +89,8 @@ def test_dumpContentIntoFile_returnVal(tmp_path):
 
 	# Call the target function
 	returnedSize = dumpContentIntoFile(
-		filePath=testFilePath,
-		content=textwrap.dedent(testContent).strip()
+		strP=testContent,
+		fileP=testFilePath
 	)
 
 	# Get the size of the content we wrote
