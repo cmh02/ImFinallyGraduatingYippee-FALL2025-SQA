@@ -35,7 +35,7 @@ jobs:
           export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
           pytest -s --md-report --md-report-flavor gfm --md-report-color never --md-report-output "$REPORT_OUTPUT"
 
-      # Add unit test report to GitHub Summary
+      # Add unit test report to GitHub Summary with JS
       - name: Add Unit Testing Summary to GitHub Summary
         uses: actions/github-script@v7
         with:
@@ -44,7 +44,7 @@ jobs:
             const content = fs.readFileSync(process.env.REPORT_FILE, 'utf8');
             await core.summary
               .addHeading('Unit Test Report')
-              .addRaw(content)
+              .addRaw(content, true)
               .write();
 
       # Upload report as artifact
