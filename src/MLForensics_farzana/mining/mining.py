@@ -42,26 +42,34 @@ def dumpContentIntoFile(strP, fileP):
     # Log the call
     logger = logging.getLogger()
     logger.info(f"Call was made to dump content into file: {str(fileP)}")
-    logger.debug(f"File Path Type: {type(fileP)}")
-    logger.debug(f"Content Type: {type(strP)}")
-    logger.debug(f"Content to Write Length: {len(strP)}")
-    logger.debug(f"Content to write:\n{str(strP)}")
 
     # Validate the content string
     if not strP:
+        logger.error(f"ValueError occured when no content was provided to dumpContentIntoFile function!\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise ValueError("No content was provided to write to file!")
     elif isinstance(strP, str) is False:
+        logger.error(f"TypeError occured when invalid content type was provided to dumpContentIntoFile function!\nstrP Type: {type(strP)}\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise TypeError("The content provided to write to file is not a string!")
     elif len(strP) < 1:
+        logger.error(f"ValueError occured when empty content string was provided to dumpContentIntoFile function!\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise ValueError("The content provided to write to file is an empty string!")
     
     # Validate the file path
     if not fileP:
+        logger.error(f"ValueError occured when no file path was provided to dumpContentIntoFile function!\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise ValueError("No file path was provided to write content to!")
     elif isinstance(fileP, str) is False:
+        logger.error(f"TypeError occured when invalid file path type was provided to dumpContentIntoFile function!\nfileP Type: {type(fileP)}\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise TypeError("The file path provided to write content to is not a string!")
     elif len(fileP) < 1:
+        logger.error(f"ValueError occured when empty file path string was provided to dumpContentIntoFile function!\nstrP: {str(fileP)}\nfileP: {str(fileP)}")
         raise ValueError("The file path provided to write content to is an empty string!")
+
+    # Print debug information for normal operation
+    logger.debug(f"File Path Type: {type(fileP)}")
+    logger.debug(f"Content Type: {type(strP)}")
+    logger.debug(f"Content to Write Length: {len(strP)}")
+    logger.debug(f"Content to write:\n{str(strP)}")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
