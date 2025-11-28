@@ -240,7 +240,7 @@ def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
 	({}, "somefile.txt"),
 	("Some content", {}),
 ])
-def test_dumpContentIntoFile_validationException2(tmp_path):
+def test_dumpContentIntoFile_validationException2(tmp_path, strP, fileP):
 	'''
 	## Unit Test: test_dumpContentIntoFile_validationException1
 
