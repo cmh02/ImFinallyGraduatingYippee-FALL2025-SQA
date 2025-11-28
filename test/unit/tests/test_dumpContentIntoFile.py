@@ -16,8 +16,10 @@ from test.unit.logging import UnitLogger
 
 # System
 import os
-import json
 import textwrap
+
+# Testing
+import pytest # type: ignore[reportMissingImports]
 
 def test_dumpContentIntoFile_fileIsWritten(tmp_path):
 	'''
@@ -178,12 +180,21 @@ def test_dumpContentIntoFile_returnVal(tmp_path):
 	# Assert that the returned size matches the actual size
 	assert int(returnedSize) == int(actualSize)
 
-def test_dumpContentIntoFile_validationException1(tmp_path):
+@pytest.mark.parametrize("strP, fileP", [
+	(None, "somefile.txt"),
+	("", "somefile.txt"),
+	("Some content", None),
+	("Some content", ""),
+])
+def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
 	'''
 	## Unit Test: test_dumpContentIntoFile_validationException1
 
-	Test that the target function validates data by returning a
-	ValueError when strP is not set.
+	Test that the target function validates data by returning ValueErrors with following conditions:
+	- strP is not set
+	- strP is an empty string
+	- fileP is not set
+	- fileP is an empty string
 
 	Args:
 		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
@@ -221,12 +232,21 @@ def test_dumpContentIntoFile_validationException1(tmp_path):
 		assert returnedException is not None
 		assert isinstance(returnedException, ValueError)
 
+@pytest.mark.parametrize("strP, fileP", [
+	(1, "somefile.txt"),
+	("Some content", 1),
+	([], "somefile.txt"),
+	("Some content", []),
+	({}, "somefile.txt"),
+	("Some content", {}),
+])
 def test_dumpContentIntoFile_validationException2(tmp_path):
 	'''
 	## Unit Test: test_dumpContentIntoFile_validationException1
 
-	Test that the target function validates data by returning a
-	TypeError when strP is the wrong type.
+	Test that the target function validates data by returning TypeErrors with following conditions:
+	- strP is not a string
+	- fileP is not a string
 
 	Args:
 		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
@@ -263,175 +283,3 @@ def test_dumpContentIntoFile_validationException2(tmp_path):
 		# Assert that a TypeError was raised
 		assert returnedException is not None
 		assert isinstance(returnedException, TypeError)
-
-def test_dumpContentIntoFile_validationException3(tmp_path):
-	'''
-	## Unit Test: test_dumpContentIntoFile_validationException3
-
-	Test that the target function validates data by returning a
-	ValueError when strP is an empty string.
-
-	Args:
-		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
-	'''
-
-	# Get logger
-	logger = UnitLogger()
-	logger.info("Unit Testing Logger Initialized!")
-
-	# Print statement for testing
-	logger.info("Starting test_dumpContentIntoFile_returnval!")
-
-	# Make some new file path in the temp directory
-	testFilePath = os.path.join(tmp_path, "test_output.txt")
-
-	# Make some content to write to the file
-	testContent = textwrap.dedent(
-		"""
-		I am gonna graduate in like 2 weeks!!!
-		"""
-	)
-
-	# Call the target function and expect a ValueError
-	try:
-		returnedSize = dumpContentIntoFile(
-			strP="",
-			fileP=testFilePath
-		)
-	except Exception as error:
-
-		# Grab the error
-		returnedException = error
-
-		# Assert that a ValueError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, ValueError)
-
-def test_dumpContentIntoFile_validationException4(tmp_path):
-	'''
-	## Unit Test: test_dumpContentIntoFile_validationException4
-
-	Test that the target function validates data by returning a
-	ValueError when fileP is not set.
-
-	Args:
-		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
-	'''
-
-	# Get logger
-	logger = UnitLogger()
-	logger.info("Unit Testing Logger Initialized!")
-
-	# Print statement for testing
-	logger.info("Starting test_dumpContentIntoFile_returnval!")
-
-	# Make some new file path in the temp directory
-	testFilePath = os.path.join(tmp_path, "test_output.txt")
-
-	# Make some content to write to the file
-	testContent = textwrap.dedent(
-		"""
-		I am gonna graduate in like 2 weeks!!!
-		"""
-	)
-
-	# Call the target function and expect a ValueError
-	try:
-		returnedSize = dumpContentIntoFile(
-			strP=testContent,
-			fileP=None
-		)
-	except Exception as error:
-
-		# Grab the error
-		returnedException = error
-
-		# Assert that a ValueError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, ValueError)
-
-def test_dumpContentIntoFile_validationException5(tmp_path):
-	'''
-	## Unit Test: test_dumpContentIntoFile_validationException5
-
-	Test that the target function validates data by returning a
-	TypeError when fileP is the wrong type.
-
-	Args:
-		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
-	'''
-
-	# Get logger
-	logger = UnitLogger()
-	logger.info("Unit Testing Logger Initialized!")
-
-	# Print statement for testing
-	logger.info("Starting test_dumpContentIntoFile_returnval!")
-
-	# Make some new file path in the temp directory
-	testFilePath = os.path.join(tmp_path, "test_output.txt")
-
-	# Make some content to write to the file
-	testContent = textwrap.dedent(
-		"""
-		I am gonna graduate in like 2 weeks!!!
-		"""
-	)
-
-	# Call the target function and expect a ValueError
-	try:
-		returnedSize = dumpContentIntoFile(
-			strP=testContent,
-			fileP=1
-		)
-	except Exception as error:
-
-		# Grab the error
-		returnedException = error
-
-		# Assert that a TypeError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, TypeError)
-
-def test_dumpContentIntoFile_validationException6(tmp_path):
-	'''
-	## Unit Test: test_dumpContentIntoFile_validationException6
-
-	Test that the target function validates data by returning a
-	ValueError when fileP is an empty string.
-
-	Args:
-		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
-	'''
-
-	# Get logger
-	logger = UnitLogger()
-	logger.info("Unit Testing Logger Initialized!")
-
-	# Print statement for testing
-	logger.info("Starting test_dumpContentIntoFile_returnval!")
-
-	# Make some new file path in the temp directory
-	testFilePath = os.path.join(tmp_path, "test_output.txt")
-
-	# Make some content to write to the file
-	testContent = textwrap.dedent(
-		"""
-		I am gonna graduate in like 2 weeks!!!
-		"""
-	)
-
-	# Call the target function and expect a ValueError
-	try:
-		returnedSize = dumpContentIntoFile(
-			strP=testContent,
-			fileP=""
-		)
-	except Exception as error:
-
-		# Grab the error
-		returnedException = error
-
-		# Assert that a ValueError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, ValueError)
