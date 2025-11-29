@@ -68,7 +68,7 @@ def test_getPythonFileCount_outputValueWhenNoPythonFiles(tmp_path):
 
 	# Get the number of python files otw to temp directory (where no python files should exist)
 	foundFiles = getPythonFileCount(
-		path2dir=tmp_path
+		path2dir=str(tmp_path)
 	)
 
 	# Assert that usage count is 0

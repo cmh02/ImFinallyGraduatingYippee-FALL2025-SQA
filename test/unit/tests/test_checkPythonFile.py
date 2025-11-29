@@ -73,7 +73,7 @@ def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path):
 
 	# Get the usage count of patterns in files otw to the given directory
 	usageCount = checkPythonFile(
-		path2dir=tmp_path
+		path2dir=str(tmp_path)
 	)
 
 	# Assert that usage count is 0
