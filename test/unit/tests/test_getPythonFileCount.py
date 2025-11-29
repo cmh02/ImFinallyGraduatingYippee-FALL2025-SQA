@@ -1,7 +1,7 @@
 '''
-Name: test_checkPythonFile.py
+Name: test_getPythonFileCount.py
 Author: Chris Hinkson @cmh02
-Description: Unit tests for checkPythonFile function.
+Description: Unit tests for getPythonFileCount function.
 '''
 
 '''
@@ -9,7 +9,7 @@ MODULE IMPORTS
 '''
 
 # Target Module Imports
-from src.MLForensics_farzana.mining.mining import checkPythonFile
+from src.MLForensics_farzana.mining.mining import getPythonFileCount
 
 # Unit Submodule Imports
 from test.unit.logging import UnitLogger
@@ -21,18 +21,14 @@ import textwrap
 # Testing
 import pytest # type: ignore[reportMissingImports]
 
-# To make this a valid file for this test, import sklearn and gym
-import sklearn # type: ignore[reportMissingImports]
-import gym # type: ignore[reportMissingImports]
-
 @pytest.mark.parametrize("path2dir", [
 	os.path.dirname(os.path.abspath(__file__)),
 ])
-def test_checkPythonFile_outputValueWhenPatterns(tmp_path, path2dir: str):
+def test_getPythonFileCount_outputValueWhenPythonFiles(tmp_path, path2dir: str):
 	'''
-	## Unit Test: test_checkPythonFile_outputValueWhenPatterns
+	## Unit Test: test_getPythonFileCount_outputValueWhenPythonFiles
 
-		Test that the checkPythonFile function actually checks for patterns in Python files.
+		Test that the getPythonFileCount function finds python files when present.
 
 	Args:
 		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
@@ -43,23 +39,22 @@ def test_checkPythonFile_outputValueWhenPatterns(tmp_path, path2dir: str):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_checkPythonFile_outputValueWhenPatterns!")
+	logger.info("Starting test_getPythonFileCount_outputValueWhenPythonFiles!")
 
-	# Get the usage count of patterns in files otw to the given directory
-	usageCount = checkPythonFile(
+	# Get the number of python files otw to the given directory
+	foundFiles = getPythonFileCount(
 		path2dir=path2dir
 	)
 
 	# Assert that usage count is valid
-	assert isinstance(usageCount, int)
-	assert usageCount > 0
+	assert isinstance(foundFiles, int)
+	assert foundFiles > 0
 
-def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path):
+def test_getPythonFileCount_outputValueWhenNoPythonFiles(tmp_path):
 	'''
-	## Unit Test: test_checkPythonFile_outputValueWhenNoPatterns
+	## Unit Test: test_getPythonFileCount_outputValueWhenNoPythonFiles
 
-		Test that the checkPythonFile function actually checks for patterns in Python files when there are no patterns present.
-
+		Test that the getPythonFileCount function finds no python files when there are no python files present.
 	Args:
 		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
 	'''
@@ -69,27 +64,27 @@ def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_checkPythonFile_outputValueWhenNoPatterns!")
+	logger.info("Starting test_getPythonFileCount_outputValueWhenNoPythonFiles!")
 
-	# Get the usage count of patterns in files otw to the given directory
-	usageCount = checkPythonFile(
+	# Get the number of python files otw to temp directory (where no python files should exist)
+	foundFiles = getPythonFileCount(
 		path2dir=tmp_path
 	)
 
 	# Assert that usage count is 0
-	assert isinstance(usageCount, int)
-	assert usageCount == 0
+	assert isinstance(foundFiles, int)
+	assert foundFiles == 0
 
 @pytest.mark.parametrize("path2dir", [
 	None,
 	"",
 	"/some/random/path/that/hopefully/does/not/exist",
 ])
-def test_checkPythonFile_validationValueError(tmp_path, path2dir: str):
+def test_getPythonFileCount_validationValueError(tmp_path, path2dir: str):
 	'''
-	## Unit Test: test_checkPythonFile_validationValueError
+	## Unit Test: test_getPythonFileCount_validationValueError
 
-	Test that the checkPythonFile function validates data by returning ValueErrors with following conditions:
+	Test that the getPythonFileCount function validates data by returning ValueErrors with following conditions:
 	- path2dir not set
 	- path2dir empty string
 	- path2dir does not exist
@@ -108,7 +103,7 @@ def test_checkPythonFile_validationValueError(tmp_path, path2dir: str):
 	# Get the usage count of patterns in files otw to the given directory, expecting ValueErrors
 	returnedException = None
 	try:
-		usageCount = checkPythonFile(
+		foundFiles = getPythonFileCount(
 			path2dir=path2dir
 		)
 	except Exception as error:
@@ -123,11 +118,11 @@ def test_checkPythonFile_validationValueError(tmp_path, path2dir: str):
 @pytest.mark.parametrize("path2dir", [
 	2002
 ])
-def test_checkPythonFile_validationTypeError(tmp_path, path2dir: str):
+def test_getPythonFileCount_validationTypeError(tmp_path, path2dir: str):
 	'''
-	## Unit Test: test_checkPythonFile_validationTypeError
+	## Unit Test: test_getPythonFileCount_validationTypeError
 
-	Test that the checkPythonFile function validates data by returning TypeErrors with following conditions:
+	Test that the getPythonFileCount function validates data by returning TypeErrors with following conditions:
 	- path2dir not a string
 
 	Args:
@@ -144,7 +139,7 @@ def test_checkPythonFile_validationTypeError(tmp_path, path2dir: str):
 	# Get the usage count of patterns in files otw to the given directory, expecting TypeErrors
 	returnedException = None
 	try:
-		usageCount = checkPythonFile(
+		foundFiles = getPythonFileCount(
 			path2dir=path2dir
 		)
 	except Exception as error:
