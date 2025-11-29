@@ -32,7 +32,11 @@ jobs:
           REPORT_OUTPUT: md_report.md
         run: |
           echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
-          python -m pytest -v --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT" --capture=tee-sys
+          python -m pytest -v \
+            --md-report 
+            --md-report-flavor gfm 
+            --md-report-output "$REPORT_OUTPUT" 
+            --capture=no
 
       # Add unit testing to GitHub Actions summary
       - name: Add Unit Testing to GitHub Summary
