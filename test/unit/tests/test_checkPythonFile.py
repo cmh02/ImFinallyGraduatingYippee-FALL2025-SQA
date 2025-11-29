@@ -26,7 +26,7 @@ import sklearn # type: ignore[reportMissingImports]
 import gym # type: ignore[reportMissingImports]
 
 @pytest.mark.parametrize("path2dir", [
-	os.path.abspath(__file__),
+	os.path.dirname(os.path.abspath(__file__)),
 ])
 def test_checkPythonFile_outputValueWhenPatterns(tmp_path, path2dir: str):
 	'''
