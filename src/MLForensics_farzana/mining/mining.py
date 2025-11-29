@@ -184,10 +184,43 @@ def checkPythonFile(path2dir):
     usageCount = 0
     patternDict = ['sklearn', 'h5py', 'gym', 'rl', 'tensorflow', 'keras', 'tf', 'stable_baselines', 'tensorforce', 'rl_coach', 'pyqlearning', 'MAMEToolkit', 'chainer', 'torch', 'chainerrl']
     for root_, dirnames, filenames in os.walk(path2dir):
+
+        '''
+        BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+        '''
+        logger.debug(f"-> Checking directory: {str(root_)} with {str(len(filenames))} files!")
+        logger.debug(f"-> Dirnames ({str(len(dirnames))}): ")
+        for dirname in dirnames:
+            logger.debug(f"   --> {str(dirname)}")
+        logger.debug(f"-> Filenames ({str(len(filenames))}): ")
+        for filename in filenames:
+            logger.debug(f"   --> {str(filename)}")
+        '''
+        END MODIFICATIONS BY CHRIS HINKSON @CMH02
+        '''
+
         for file_ in filenames:
             full_path_file = os.path.join(root_, file_) 
             if(os.path.exists(full_path_file)):
-                if ((file_.endswith('py')) or (file_.endswith('ipynb')))  :
+
+                '''
+                BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+                '''
+                logger.debug(f"--> Checking file: {str(full_path_file)}")
+                '''
+                END MODIFICATIONS BY CHRIS HINKSON @CMH02
+                '''
+
+                if ((file_.endswith('py')) or (file_.endswith('ipynb'))):
+
+                    '''
+                    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+                    '''
+                    logger.debug(f"--> File is a Python file: {str(full_path_file)}")
+                    '''
+                    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+                    '''
+
                     f = open(full_path_file, 'r', encoding='latin-1')
                     pythonFileContent = f.read()
                     pythonFileContent = pythonFileContent.split('\n') 
@@ -196,7 +229,16 @@ def checkPythonFile(path2dir):
                         for item_ in patternDict:
                             if(item_ in content_):
                                 usageCount = usageCount + 1
-                                print('item_->->->',  content_)                    
+                                # print('item_->->->',  content_)  
+
+                                '''
+                                BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+                                ''' 
+                                logger.debug(f"----> Pattern found: {str(item_)} in file: {str(full_path_file)}")
+                                '''
+                                END MODIFICATIONS BY CHRIS HINKSON @CMH02
+                                '''
+                                              
     return usageCount  
     
 
