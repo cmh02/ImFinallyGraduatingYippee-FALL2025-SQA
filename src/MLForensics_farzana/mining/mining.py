@@ -189,7 +189,7 @@ def checkPythonFile(path2dir):
     '''
     logger.debug(f"Beginning walk to file looking for patterns!")
     logger.debug(f"-> Pattern Dictionary: {str(patternDict)}")
-    logger.debug(f"-> OS Walk: {str(os.walk(path2dir))}")
+    logger.debug(f"-> OS Walk: {str([i for i in os.walk(path2dir)])}")
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
     '''
