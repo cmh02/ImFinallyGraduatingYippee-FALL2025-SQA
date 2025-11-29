@@ -18,7 +18,7 @@ GLOBAL LOGGER INSTANCE / DEFINITION
 '''
 
 _logger = None
-def UnitLogger(name: str = "UnitLogger", log_dir: str = "logs") -> logging.Logger:
+def UnitLogger(name: str = None, log_dir: str = "logs") -> logging.Logger:
     
     # If already initialized, return existing logger
     global _logger
@@ -32,7 +32,10 @@ def UnitLogger(name: str = "UnitLogger", log_dir: str = "logs") -> logging.Logge
     log_file = os.path.join(log_dir, f"{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.log")
 
     # Create logger
-    logger = logging.getLogger(name)
+    if name is not None:
+        logger = logging.getLogger(name)
+    else:
+        logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
 
     # Prevent adding multiple handlers if imported repeatedly

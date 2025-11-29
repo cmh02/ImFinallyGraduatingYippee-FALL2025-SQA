@@ -157,7 +157,7 @@ def checkPythonFile(path2dir):
 
     # Log the call
     logger = logging.getLogger()
-    logger.info(f"Call was made to make chunks for a list!")
+    logger.info(f"Call was made to check for patterns in python files!")
 
     # Validate the directory path
     if not path2dir:
