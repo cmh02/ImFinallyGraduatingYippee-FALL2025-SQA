@@ -31,11 +31,11 @@ jobs:
         env:
           REPORT_OUTPUT: md_report.md
         run: |
-          export PYTHONPATH="${PYTHONPATH}:${GITHUB_WORKSPACE}"
           echo "REPORT_FILE=${REPORT_OUTPUT}" >> "$GITHUB_ENV"
-          pytest -v --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT"
+          python -m pytest -v --md-report --md-report-flavor gfm --md-report-output "$REPORT_OUTPUT"
 
-      - name: Add Unit Testing Summary to GitHub Summary
+      # Add unit testing to GitHub Actions summary
+      - name: Add Unit Testing to GitHub Summary
         shell: bash
         run: |
           if [ -f "$REPORT_FILE" ]; then
