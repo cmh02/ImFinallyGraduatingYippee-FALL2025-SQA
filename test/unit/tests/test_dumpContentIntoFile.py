@@ -1,7 +1,7 @@
 '''
 Name: test_dumpContentIntoFile.py
 Author: Chris Hinkson @cmh02
-Description: Main entry point for unit CI testing.
+Description: Unit tests for dumpContentIntoFile function.
 '''
 
 '''
@@ -186,9 +186,9 @@ def test_dumpContentIntoFile_returnVal(tmp_path):
 	("Some content", None),
 	("Some content", ""),
 ])
-def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
+def test_dumpContentIntoFile_validationValueError(tmp_path, strP, fileP):
 	'''
-	## Unit Test: test_dumpContentIntoFile_validationException1
+	## Unit Test: test_dumpContentIntoFile_validationValueError
 
 	Test that the target function validates data by returning ValueErrors with following conditions:
 	- strP is not set
@@ -218,6 +218,7 @@ def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
 	)
 
 	# Call the target function and expect a ValueError
+	returnedException = None
 	try:
 		returnedSize = dumpContentIntoFile(
 			strP=None,
@@ -228,9 +229,9 @@ def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
 		# Grab the error
 		returnedException = error
 
-		# Assert that a ValueError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, ValueError)
+	# Assert that a ValueError was raised
+	assert returnedException is not None
+	assert isinstance(returnedException, ValueError)
 
 @pytest.mark.parametrize("strP, fileP", [
 	(1, "somefile.txt"),
@@ -240,9 +241,9 @@ def test_dumpContentIntoFile_validationException1(tmp_path, strP, fileP):
 	({}, "somefile.txt"),
 	("Some content", {}),
 ])
-def test_dumpContentIntoFile_validationException2(tmp_path, strP, fileP):
+def test_dumpContentIntoFile_validationTypeError(tmp_path, strP, fileP):
 	'''
-	## Unit Test: test_dumpContentIntoFile_validationException1
+	## Unit Test: test_dumpContentIntoFile_validationTypeError
 
 	Test that the target function validates data by returning TypeErrors with following conditions:
 	- strP is not a string
@@ -270,6 +271,7 @@ def test_dumpContentIntoFile_validationException2(tmp_path, strP, fileP):
 	)
 
 	# Call the target function and expect a ValueError
+	returnedException = None
 	try:
 		returnedSize = dumpContentIntoFile(
 			strP=1,
@@ -280,6 +282,6 @@ def test_dumpContentIntoFile_validationException2(tmp_path, strP, fileP):
 		# Grab the error
 		returnedException = error
 
-		# Assert that a TypeError was raised
-		assert returnedException is not None
-		assert isinstance(returnedException, TypeError)
+	# Assert that a TypeError was raised
+	assert returnedException is not None
+	assert isinstance(returnedException, TypeError)
