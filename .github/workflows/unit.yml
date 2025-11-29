@@ -14,19 +14,23 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Setup python with correct version
+      # Setup python with correct version (3.13.5 for this project)
       - name: Python Setup
         uses: actions/setup-python@v4
         with:
           python-version: "3.13.5"
 
-      # Install python dependencies
+      # Install python dependencies (see requirements.txt for full list)
       - name: Install PIP dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Run unit tests
+      # Run unit tests in project directory (via pytest call with flags):
+      # --> -v, -s, --capture=tee-sys, --log-level=DEBUG, --log-cli-level=DEBUG all prepare output
+      #     for reporting and debugging with print statements, file log messages, and github test logs
+      # --> --md-report, --md-report-flavor gfm, --md-report-output generate a md report for github summary
+      #     with a colored table to show pass/fail results
       - name: Unit Testing
         env:
           REPORT_OUTPUT: md_report.md
@@ -40,7 +44,7 @@ jobs:
             --log-level=DEBUG \
             --log-cli-level=DEBUG
 
-      # Add unit testing to GitHub Actions summary
+      # Add unit testing to GitHub Actions summary (dropdown with table)
       - name: Add Unit Testing to GitHub Summary
         shell: bash
         run: |
@@ -52,7 +56,7 @@ jobs:
             echo "</details>" >> $GITHUB_STEP_SUMMARY
           fi
 
-      # Upload report as artifact
+      # Upload report as artifact (downloadable md file)
       - name: Upload Report Artifact
         uses: actions/upload-artifact@v4
         with:

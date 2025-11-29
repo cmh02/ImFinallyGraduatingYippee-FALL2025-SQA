@@ -33,7 +33,7 @@ After looking around the codebase, I identified that the most-fuzzible functions
 * `days_between()`
 * `getPythonFileCount()`
 
-Looking a bit further at these functions (into more of a Greybox fuzzing scenario or even Whitebox depending upon perspective), the functions lack initial explicit handling of validation. Particularly, there is no type hinting, no nullity check, no valid type checking, and little validation. Most functions simply attempt to perform an operation and rely on other calls to "pass up" any errors (or rather, they hope that they don't occur at all). 
+Looking a bit further at these functions (into more of a Greybox fuzzing scenario or even Whitebox depending upon perspective), the functions lack initial explicit handling of validation. Particularly, there is no type hinting, no nullity check, no valid type checking, and little validation. Most functions simply attempt to perform an operation and rely on other calls to "pass up" any errors (or rather, they hope that they don't occur at all).
 
 To align with these expectations, I based my `pass` and `fail` criteria on the presence of un-whitelisted exceptions. To implement this, I make a list of exceptions that I expect to occur under certain conditions, including `TypeError` and `ValueError`. The idea is that, even though the target functions do not explicitly check for conditions that would result in these errors, the underlying behavior of them should lead to them for the majority of input and does not designate a system failure on their own. Instead, more rare errors - as observed for a smaller subset of fuzzing input - would indicate that the selected target functions contain critical bugs.
 
@@ -62,7 +62,7 @@ To provide visible examples of the added forensics, I extended this project to a
 * One test case for each possible error added with forensics
   * Displays what extra forensics may be available under each possible error case with my added validation
 
-To facilitate the execution of my unit test cases, I decided to use [pytest](https://docs.pytest.org/en/stable/), as it is a much more modern framework and integrates nicely with GitHub's CI (with the use of the pytest-md addon). I implemented test cases to cover each of the target functions and explore forensics in a respective file for each function. All of these use the root logger to allow output to log files and console, enhancing the ability to investigate possible bugs when they occur. 
+To facilitate the execution of my unit test cases, I decided to use [pytest](https://docs.pytest.org/en/stable/), as it is a much more modern framework and integrates nicely with GitHub's CI (with the use of the pytest-md addon). I implemented test cases to cover each of the target functions and explore forensics in a respective file for each function. All of these use the root logger to allow output to log files and console, enhancing the ability to investigate possible bugs when they occur.
 
 #### GitHub Continuous Integration for Unit Testing
 
@@ -75,9 +75,17 @@ To expand my continious integration for unit testing, I created an [additional w
 5. Add the unit testing summary for GitHub actions
 6. Upload the report as an artifact
 
+### Code Deliverables
+
+To ensure that the deiverable portion of this assignment was met for the code requirement, you can find the implementation in the following three locations:
+
+* The fuzzing and unit tests are implemented in [test/fuzz](test/fuzz) and [test/unit](test/unit), respectively
+* The forensics are implemented in [src/MLForensics_farzana/mining/mining.py](src/MLForensics_farzana/mining/mining.py)
+* The CI pipelines are implemented in [.github/workflows](.github/workflows)
+
 ### Execution Deliverables
 
-To ensure that the deliverable portion of this assignment was met, the execution of the forensics, fuzzing, and continuous integration can be found for the respective CI workflows on GitHub.
+To ensure that the deliverable portion of this assignment was met for the execution requirement, the execution of the forensics, fuzzing, and continuous integration can be found for the respective CI workflows on GitHub.
 
 * The latest fuzz workflow execution (includes fuzzing, fuzz reports, and CI) can be found [here](https://github.com/cmh02/ImFinallyGraduatingYippee-FALL2025-SQA/actions/runs/19778175957)
 * The latest unit test workflow execution (includes unit tests, forensics, and CI) can be found [here](https://github.com/cmh02/ImFinallyGraduatingYippee-FALL2025-SQA/actions/runs/19778175942)
@@ -113,32 +121,512 @@ Overall, these exceptions show that there may be some vulerabilities within this
 
 From the [unit testing continuous integration pipeline](https://github.com/cmh02/ImFinallyGraduatingYippee-FALL2025-SQA/actions/workflows/unit.yml), the results of unit test cases show that all test cases passed for all target functions. There are a total of 49 test cases to provide coverage on these target functions. From the [unit test case summary section](https://github.com/cmh02/ImFinallyGraduatingYippee-FALL2025-SQA/actions/runs/19778175942/attempts/1#summary-56674170303), it is shown the spread of unit tests and the passing status for each:
 
-|                  filepath                   |                       function                       | $$\textcolor{#23d18b}{\tt{passed}}$$ | SUBTOTAL |
-| ------------------------------------------- | ---------------------------------------------------- | --------------------------------: | -------: |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_outputValueWhenPatterns}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_outputValueWhenNoPatterns}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_validationValueError}}$$ |   $$\textcolor{#23d18b}{\tt{3}}$$ | $$\textcolor{#23d18b}{\tt{3}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_validationTypeError}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenSameDate}}$$ |   $$\textcolor{#23d18b}{\tt{2}}$$ | $$\textcolor{#23d18b}{\tt{2}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenFirstMoreRecent}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenSecondMoreRecent}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_days\\_between\\_validationValueError}}$$ |   $$\textcolor{#23d18b}{\tt{2}}$$ | $$\textcolor{#23d18b}{\tt{2}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_days\\_between\\_validationTypeError}}$$ |   $$\textcolor{#23d18b}{\tt{2}}$$ | $$\textcolor{#23d18b}{\tt{2}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileIsWritten}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileContentIsWritten}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileContentIsCorrect}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_returnVal}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_validationValueError}}$$ |   $$\textcolor{#23d18b}{\tt{4}}$$ | $$\textcolor{#23d18b}{\tt{4}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_validationTypeError}}$$ |   $$\textcolor{#23d18b}{\tt{6}}$$ | $$\textcolor{#23d18b}{\tt{6}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_outputValueWhenPythonFiles}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_outputValueWhenNoPythonFiles}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_validationValueError}}$$ |   $$\textcolor{#23d18b}{\tt{3}}$$ | $$\textcolor{#23d18b}{\tt{3}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_validationTypeError}}$$ |   $$\textcolor{#23d18b}{\tt{1}}$$ | $$\textcolor{#23d18b}{\tt{1}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_makeChunks\\_listGetsSplit}}$$ |   $$\textcolor{#23d18b}{\tt{3}}$$ | $$\textcolor{#23d18b}{\tt{3}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_makeChunks\\_listGetsSplitToSize}}$$ |   $$\textcolor{#23d18b}{\tt{5}}$$ | $$\textcolor{#23d18b}{\tt{5}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_makeChunks\\_validationValueError}}$$ |   $$\textcolor{#23d18b}{\tt{5}}$$ | $$\textcolor{#23d18b}{\tt{5}}$$ |
-| $$\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}$$ | $$\textcolor{#23d18b}{\tt{test\\_makeChunks\\_validationTypeError}}$$ |   $$\textcolor{#23d18b}{\tt{2}}$$ | $$\textcolor{#23d18b}{\tt{2}}$$ |
-| $$\textcolor{#23d18b}{\tt{TOTAL}}$$         |                                                      |  $$\textcolor{#23d18b}{\tt{49}}$$ | $$\textcolor{#23d18b}{\tt{49}}$$ |
+| filepath                                                                   | function                                                                              | 
+$$
+\textcolor{#23d18b}{\tt{passed}}
+$$
+
+ |                        SUBTOTAL |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ----------------------------------: | ------------------------------: |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}
+$$
+
+     | 
+$$
+\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_outputValueWhenPatterns}}
+$$
+
+         |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}
+$$
+
+     | 
+$$
+\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_outputValueWhenNoPatterns}}
+$$
+
+       |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}
+$$
+
+     | 
+$$
+\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_validationValueError}}
+$$
+
+            |      
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_checkPythonFile.py}}
+$$
+
+     | 
+$$
+\textcolor{#23d18b}{\tt{test\\_checkPythonFile\\_validationTypeError}}
+$$
+
+             |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}
+$$
+
+      | 
+$$
+\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenSameDate}}
+$$
+
+               |      
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}
+$$
+
+      | 
+$$
+\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenFirstMoreRecent}}
+$$
+
+        |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}
+$$
+
+      | 
+$$
+\textcolor{#23d18b}{\tt{test\\_days\\_between\\_outputWhenSecondMoreRecent}}
+$$
+
+       |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}
+$$
+
+      | 
+$$
+\textcolor{#23d18b}{\tt{test\\_days\\_between\\_validationValueError}}
+$$
+
+             |      
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_days\\_between.py}}
+$$
+
+      | 
+$$
+\textcolor{#23d18b}{\tt{test\\_days\\_between\\_validationTypeError}}
+$$
+
+              |      
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileIsWritten}}
+$$
+
+               |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileContentIsWritten}}
+$$
+
+        |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_fileContentIsCorrect}}
+$$
+
+        |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_returnVal}}
+$$
+
+                   |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_validationValueError}}
+$$
+
+        |      
+$$
+\textcolor{#23d18b}{\tt{4}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{4}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_dumpContentIntoFile.py}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{test\\_dumpContentIntoFile\\_validationTypeError}}
+$$
+
+         |      
+$$
+\textcolor{#23d18b}{\tt{6}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{6}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}
+$$
+
+  | 
+$$
+\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_outputValueWhenPythonFiles}}
+$$
+
+   |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}
+$$
+
+  | 
+$$
+\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_outputValueWhenNoPythonFiles}}
+$$
+
+ |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}
+$$
+
+  | 
+$$
+\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_validationValueError}}
+$$
+
+         |      
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_getPythonFileCount.py}}
+$$
+
+  | 
+$$
+\textcolor{#23d18b}{\tt{test\\_getPythonFileCount\\_validationTypeError}}
+$$
+
+          |      
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{1}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}
+$$
+
+          | 
+$$
+\textcolor{#23d18b}{\tt{test\\_makeChunks\\_listGetsSplit}}
+$$
+
+                        |      
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{3}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}
+$$
+
+          | 
+$$
+\textcolor{#23d18b}{\tt{test\\_makeChunks\\_listGetsSplitToSize}}
+$$
+
+                  |      
+$$
+\textcolor{#23d18b}{\tt{5}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{5}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}
+$$
+
+          | 
+$$
+\textcolor{#23d18b}{\tt{test\\_makeChunks\\_validationValueError}}
+$$
+
+                 |      
+$$
+\textcolor{#23d18b}{\tt{5}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{5}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{test/unit/tests/test\\_makeChunks.py}}
+$$
+
+          | 
+$$
+\textcolor{#23d18b}{\tt{test\\_makeChunks\\_validationTypeError}}
+$$
+
+                  |      
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |  
+$$
+\textcolor{#23d18b}{\tt{2}}
+$$
+
+ |
+| 
+$$
+\textcolor{#23d18b}{\tt{TOTAL}}
+$$
+
+                                         |                                                                                       |     
+$$
+\textcolor{#23d18b}{\tt{49}}
+$$
+
+ | 
+$$
+\textcolor{#23d18b}{\tt{49}}
+$$
+
+ |
 
 #### Forensics
 
