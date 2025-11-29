@@ -61,7 +61,7 @@ def test_days_between_outputWhenFirstMoreRecent(tmp_path, d1_: datetime, d2_: da
 
 		Test that the days_between function when given two dates where
 		the first date is more recent than the second date (should return
-		a negative integer == days difference).
+		a positive integer == days difference).
 	Args:
 		tmp_path: pytest temp directory - see https://docs.pytest.org/en/stable/how-to/tmp_path.html
 	'''
@@ -81,7 +81,7 @@ def test_days_between_outputWhenFirstMoreRecent(tmp_path, d1_: datetime, d2_: da
 
 	# Assert that days difference is 0
 	assert isinstance(daysDiff, int)
-	assert daysDiff < 0
+	assert daysDiff > 0
 
 @pytest.mark.parametrize("d1_, d2_", [
 	(datetime(year=2002, month=5, day=14), datetime(year=2025, month=11,  day=28)),
