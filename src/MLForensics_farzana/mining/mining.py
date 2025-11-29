@@ -100,29 +100,38 @@ def makeChunks(the_list, size_):
     # Log the call
     logger = logging.getLogger()
     logger.info(f"Call was made to make chunks for a list!")
+
+    # Validate the list
+    if not the_list:
+        logger.error(f"ValueError occured when no list was provided to makeChunks function! \nList: {str(the_list)}\nChunk Size: {str(size_)}")
+        raise ValueError("No list was provided to chunk!")
+    elif isinstance(the_list, list) is False:
+        logger.error(f"TypeError occured when invalid list type was provided to makeChunks function! \nList Type: {type(the_list)}\nList: {str(the_list)}\nChunk Size: {str(size_)}")
+        raise TypeError("The provided input to chunk is not a list!")
+    elif len(the_list) < 1:
+        logger.error(f"ValueError occured when empty list was provided to makeChunks function! \nList: {str(the_list)}\nChunk Size: {str(size_)}")
+        raise ValueError("The provided list to chunk is empty!")
+    
+    # Validate the chunk size
+    if not size_:
+        logger.error(f"ValueError occured when no chunk size was provided to makeChunks function! \nList Length: {len(the_list)}\nChunk Size: {str(size_)}")
+        raise ValueError("No chunk size was provided!")
+    elif isinstance(size_, int) is False:
+        logger.error(f"TypeError occured when invalid chunk size type was provided to makeChunks function! \nChunk Size Type: {type(size_)}\nList Length: {len(the_list)}\nChunk Size: {str(size_)}")
+        raise TypeError("The provided chunk size is not an integer!")
+    elif size_ < 1:
+        logger.error(f"ValueError occured when invalid chunk size value was provided to makeChunks function! \nChunk Size Value: {str(size_)}\nList Length: {len(the_list)}\nChunk Size: {str(size_)}")
+        raise ValueError("The provided chunk size is less than 1!")
+    elif size_ > len(the_list):
+        logger.error(f"ValueError occured when chunk size larger than list size was provided to makeChunks function! \nChunk Size Value: {str(size_)}\nList Length: {len(the_list)}\nChunk Size: {str(size_)}")
+        raise ValueError("The provided chunk size is larger than the list size!")
+
+    # Print debug information for normal operation  
     logger.debug(f"Chunk Size Type: {type(size_)}")
     logger.debug(f"Chunk Size Value: {str(size_)}")
     logger.debug(f"List Type: {type(the_list)}")
     logger.debug(f"List Length: {len(the_list)}")
     logger.debug(f"List Content (truncated to 500 characters): \n{str(the_list)[:500]}")
-
-    # Validate the list
-    if not the_list:
-        raise ValueError("No list was provided to chunk!")
-    elif isinstance(the_list, list) is False:
-        raise TypeError("The provided input to chunk is not a list!")
-    elif len(the_list) < 1:
-        raise ValueError("The provided list to chunk is empty!")
-    
-    # Validate the chunk size
-    if not size_:
-        raise ValueError("No chunk size was provided!")
-    elif isinstance(size_, int) is False:
-        raise TypeError("The provided chunk size is not an integer!")
-    elif size_ < 1:
-        raise ValueError("The provided chunk size is less than 1!")
-    elif size_ > len(the_list):
-        raise ValueError("The provided chunk size is larger than the list size!")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
@@ -149,18 +158,24 @@ def checkPythonFile(path2dir):
     # Log the call
     logger = logging.getLogger()
     logger.info(f"Call was made to make chunks for a list!")
-    logger.debug(f"Directory Path Type: {type(path2dir)}")
-    logger.debug(f"Directory Path Value: {str(path2dir)}")
 
     # Validate the directory path
     if not path2dir:
+        logger.error(f"ValueError occured when no directory path was provided to checkPythonFile function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("No directory path was provided to check!")
     elif isinstance(path2dir, str) is False:
+        logger.error(f"TypeError occured when invalid directory path type was provided to checkPythonFile function! \nDirectory Path Type: {type(path2dir)}\nDirectory Path: {str(path2dir)}")
         raise TypeError("The provided directory path is not a string!")
     elif len(path2dir) < 1:
+        logger.error(f"ValueError occured when empty directory path string was provided to checkPythonFile function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("The provided directory path is an empty string!")
     elif os.path.exists(path2dir) is False:
+        logger.error(f"ValueError occured when non-existent directory path was provided to checkPythonFile function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("The provided directory path does not exist!")
+
+    # Print debug information for normal operation
+    logger.debug(f"Directory Path Type: {type(path2dir)}")
+    logger.debug(f"Directory Path Value: {str(path2dir)}")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
@@ -196,20 +211,26 @@ def days_between(d1_, d2_): ## pass in date time objects, if string see commente
     # Log the call
     logger = logging.getLogger()
     logger.info(f"Call was made to calculate the days between two dates!")
+
+    # Validate the date inputs
+    if not d1_:
+        logger.error(f"ValueError occured when no first date was provided to calculate days between! d1: {str(d1_)} d2: {str(d2_)}")
+        raise ValueError("No first date was provided to calculate days between!")
+    if not d2_:
+        logger.error(f"ValueError occured when no second date was provided to calculate days between! d1: {str(d1_)} d2: {str(d2_)}")
+        raise ValueError("No second date was provided to calculate days between!")
+    if isinstance(d1_, datetime) is False:
+        logger.error(f"TypeError occured when first date provided is not a datetime object! d1: {str(d1_)} d2: {str(d2_)}")
+        raise TypeError("The first date provided is not a datetime object!")
+    if isinstance(d2_, datetime) is False:
+        logger.error(f"TypeError occured when second date provided is not a datetime object! d1: {str(d1_)} d2: {str(d2_)}")
+        raise TypeError("The second date provided is not a datetime object!")
+
+    # Print debug information for normal operation
     logger.debug(f"Date 1 Type: {type(d1_)}")
     logger.debug(f"Date 1 Value: {str(d1_)}")
     logger.debug(f"Date 2 Type: {type(d2_)}")
     logger.debug(f"Date 2 Value: {str(d2_)}")
-
-    # Validate the date inputs
-    if not d1_:
-        raise ValueError("No first date was provided to calculate days between!")
-    if not d2_:
-        raise ValueError("No second date was provided to calculate days between!")
-    if isinstance(d1_, datetime) is False:
-        raise TypeError("The first date provided is not a datetime object!")
-    if isinstance(d2_, datetime) is False:
-        raise TypeError("The second date provided is not a datetime object!")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
@@ -285,18 +306,24 @@ def getPythonFileCount(path2dir):
     # Log the call
     logger = logging.getLogger()
     logger.info(f"Call was made to get python file count!")
-    logger.debug(f"Directory Path Type: {type(path2dir)}")
-    logger.debug(f"Directory Path Value: {str(path2dir)}")
 
     # Validate the directory path
     if not path2dir:
+        logger.error(f"ValueError occured when no directory path was provided to getPythonFileCount function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("No directory path was provided to check!")
     elif isinstance(path2dir, str) is False:
+        logger.error(f"TypeError occured when invalid directory path type was provided to getPythonFileCount function! \nDirectory Path Type: {type(path2dir)}\nDirectory Path: {str(path2dir)}")
         raise TypeError("The provided directory path is not a string!")
     elif len(path2dir) < 1:
+        logger.error(f"ValueError occured when empty directory path string was provided to getPythonFileCount function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("The provided directory path is an empty string!")
     elif os.path.exists(path2dir) is False:
+        logger.error(f"ValueError occured when non-existent directory path was provided to getPythonFileCount function! \nDirectory Path: {str(path2dir)}")
         raise ValueError("The provided directory path does not exist!")
+
+    # Print debug information for normal operation
+    logger.debug(f"Directory Path Type: {type(path2dir)}")
+    logger.debug(f"Directory Path Value: {str(path2dir)}")
 
     '''
     END MODIFICATIONS BY CHRIS HINKSON @CMH02
