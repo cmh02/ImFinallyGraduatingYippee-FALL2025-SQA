@@ -43,7 +43,7 @@ def test_checkPythonFile_outputValueWhenPatterns(tmp_path, path2dir: str):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_makeChunks_listGetsSplit!")
+	logger.info("Starting test_checkPythonFile_outputValueWhenPatterns!")
 
 	# Get the usage count of patterns in files otw to the given directory
 	usageCount = checkPythonFile(
@@ -69,7 +69,7 @@ def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_makeChunks_listGetsSplit!")
+	logger.info("Starting test_checkPythonFile_outputValueWhenNoPatterns!")
 
 	# Make a new file with no patterns in the temp diretory
 	newFilePath = os.path.join(tmp_path, "no_pattern_file.py")
@@ -112,7 +112,7 @@ def test_checkPythonFile_validationValueError(tmp_path, path2dir: str):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_makeChunks_listGetsSplit!")
+	logger.info("Starting test_checkPythonFile_validationValueError!")
 
 	# Get the usage count of patterns in files otw to the given directory, expecting ValueErrors
 	returnedException = None
@@ -148,7 +148,7 @@ def test_checkPythonFile_validationTypeError(tmp_path, path2dir: str):
 	logger.info("Unit Testing Logger Initialized!")
 
 	# Print statement for testing
-	logger.info("Starting test_makeChunks_listGetsSplit!")
+	logger.info("Starting test_checkPythonFile_validationTypeError!")
 
 	# Get the usage count of patterns in files otw to the given directory, expecting TypeErrors
 	returnedException = None
