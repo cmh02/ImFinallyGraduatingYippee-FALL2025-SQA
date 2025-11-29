@@ -21,6 +21,10 @@ import textwrap
 # Testing
 import pytest # type: ignore[reportMissingImports]
 
+# To make this a valid file for this test, import sklearn and gym
+import sklearn # type: ignore[reportMissingImports]
+import gym # type: ignore[reportMissingImports]
+
 @pytest.mark.parametrize("path2dir", [
 	os.path.abspath(__file__),
 ])
