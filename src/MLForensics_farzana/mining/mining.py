@@ -183,12 +183,23 @@ def checkPythonFile(path2dir):
 
     usageCount = 0
     patternDict = ['sklearn', 'h5py', 'gym', 'rl', 'tensorflow', 'keras', 'tf', 'stable_baselines', 'tensorforce', 'rl_coach', 'pyqlearning', 'MAMEToolkit', 'chainer', 'torch', 'chainerrl']
+    
+    '''
+    BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+    logger.debug(f"Beginning walk to file looking for patterns!")
+    logger.debug(f"-> Pattern Dictionary: {str(patternDict)}")
+    logger.debug(f"-> OS Walk: {str(os.walk(path2dir))}")
+    '''
+    END MODIFICATIONS BY CHRIS HINKSON @CMH02
+    '''
+
     for root_, dirnames, filenames in os.walk(path2dir):
 
         '''
         BEGIN MODIFICATIONS BY CHRIS HINKSON @CMH02
         '''
-        logger.debug(f"-> Checking directory: {str(root_)} with {str(len(filenames))} files!")
+        logger.debug(f"Checking directory: {str(root_)} with {str(len(filenames))} files!")
         logger.debug(f"-> Dirnames ({str(len(dirnames))}): ")
         for dirname in dirnames:
             logger.debug(f"   --> {str(dirname)}")
