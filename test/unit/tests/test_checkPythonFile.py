@@ -54,10 +54,7 @@ def test_checkPythonFile_outputValueWhenPatterns(tmp_path, path2dir: str):
 	assert isinstance(usageCount, int)
 	assert usageCount > 0
 
-@pytest.mark.parametrize("path2dir", [
-	os.path.abspath(__file__),
-])
-def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path, path2dir: str):
+def test_checkPythonFile_outputValueWhenNoPatterns(tmp_path):
 	'''
 	## Unit Test: test_checkPythonFile_outputValueWhenNoPatterns
 
